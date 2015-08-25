@@ -1,6 +1,6 @@
 
 public class ExaMain {
 	public static void main(String args[]){
-		System.out.println("EXA");
+		System.out.println("EXA!");
 	}
 }
