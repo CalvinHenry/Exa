@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 
 public abstract class Entity {
 	
-	private Point location;
-	private Point momentum;
+	private Point location; //(x, y)
+	private Point momentum; //(velocity, r[degrees])
 	private AffineTransform transform;
 	private BufferedImage image;
 	
