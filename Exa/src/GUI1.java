@@ -3,7 +3,7 @@ import java.awt.event.KeyEvent;
 
 public class GUI1 extends javax.swing.JFrame implements java.awt.event.KeyListener{
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L; //
 	
 	public GUI1(){
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
