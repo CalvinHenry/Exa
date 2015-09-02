@@ -10,19 +10,28 @@ import javax.swing.JFrame;
 
 public class GUI1 extends javax.swing.JFrame implements java.awt.event.KeyListener{
 
+
 	private static final long serialVersionUID = 1L;
 	Entity entity;
 	public GUI1(Entity e){
 		e = entity;
+	}
+	
+	public GUI1(){
+
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 	}
 	
+
 	
 	public void paintComponent(Graphics g) {
 		Graphics2D g2D = (Graphics2D)g.create();
 		
-		
 	}
+	public static void main(String [] args){
+		(new GUI1()).setVisible(true);
+	}
+
 
 	public void keyPressed(KeyEvent e) {
 	    int keyCode = e.getKeyCode();
