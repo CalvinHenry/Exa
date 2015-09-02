@@ -2,6 +2,10 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public abstract class Entity {
 	
@@ -11,7 +15,12 @@ public abstract class Entity {
 	private BufferedImage image;
 	
 	public Entity(){
-		
+		try {
+			image = ImageIO.read(new File((getClass().getResource("Recourses/Qufeb.png").getPath())));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateLocation(){ //moves object according to momentum vector
