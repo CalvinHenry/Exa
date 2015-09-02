@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 public class GUI1 extends javax.swing.JFrame implements java.awt.event.KeyListener{
@@ -6,6 +7,13 @@ public class GUI1 extends javax.swing.JFrame implements java.awt.event.KeyListen
 	
 	public GUI1(){
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+	}
+	
+	public static void main(String [] args){
+		(new GUI1()).setVisible(true);
+	}
+	public void paintComponent(Graphics g){
+		
 	}
 
 	public void keyPressed(KeyEvent e) {
