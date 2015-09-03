@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public abstract class Entity {
+public class Entity {
 	
 	private Point location; //(x, y)
 	private Point momentum; //(velocity, r[degrees])
@@ -21,6 +21,8 @@ public abstract class Entity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		location = new Point(500,500);
+		momentum = new Point(0,0);
 	}
 	
 	public void updateLocation(){ //moves object according to momentum vector
@@ -30,7 +32,7 @@ public abstract class Entity {
 	}
 	public void accelerate(double change){
 		momentum.x += change;
-		if(momentum.x < 0){
+		if(momentum.x > 0){
 			momentum.x = 0;
 		}
 	}
@@ -40,9 +42,15 @@ public abstract class Entity {
 			momentum.y -= 360;
 		updateTransform();
 	}
-	
+	public int getXLocation(){
+		return location.x;
+	}
+	public int getYLocation(){
+		return location.y;
+	}
 	private void updateTransform(){
-		transform = AffineTransform.getRotateInstance(momentum.y,location.x,location.y);
+		//transform = AffineTransform.getRotateInstance(momentum.y,image.getWidth(),image.getHeight()/2);
+		
 	}
 	public BufferedImage getImage(){
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
