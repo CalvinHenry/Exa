@@ -26,9 +26,11 @@ public class Entity {
 	}
 	
 	public void updateLocation(){ //moves object according to momentum vector
-		location.x += momentum.x *Math.cos(momentum.y);
-		location.y += momentum.x *Math.sin(momentum.y);
+		location.x += (momentum.x * Math.cos(Math.toRadians(momentum.y)));
+		location.y -= momentum.x * Math.sin(Math.toRadians(momentum.y));
 		updateTransform();
+		System.out.println(location);
+		System.out.println("Momentum: " + momentum);
 	}
 	public void accelerate(double change){
 		momentum.x += change;
@@ -49,8 +51,7 @@ public class Entity {
 		return location.y;
 	}
 	private void updateTransform(){
-		//transform = AffineTransform.getRotateInstance(momentum.y,image.getWidth(),image.getHeight()/2);
-		
+		transform = AffineTransform.getRotateInstance(Math.toRadians(momentum.y), image.getWidth()/2,image.getHeight()/2);
 	}
 	public BufferedImage getImage(){
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);

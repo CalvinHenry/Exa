@@ -57,7 +57,7 @@ public class ExaClient extends javax.swing.JFrame {
 		}
 		
 		public void paintComponent(Graphics g) {
-			System.out.println("getting here");
+			
 			Graphics2D g2D = (Graphics2D)g.create();
 			g2D.drawImage(entity.getImage(), entity.getYLocation(), entity.getXLocation(), null);
 		}
@@ -73,10 +73,10 @@ public class ExaClient extends javax.swing.JFrame {
 		            entity.accelerate(1);
 		            break;
 		        case KeyEvent.VK_LEFT:
-		            entity.rotate(1);
+		            entity.rotate(-4);
 		            break;
 		        case KeyEvent.VK_RIGHT :
-		            entity.rotate(-1);
+		            entity.rotate(4);
 		            break;
 		     }
 		} 
@@ -102,7 +102,7 @@ public class ExaClient extends javax.swing.JFrame {
             	while(true){
                 frame.repaint();
                 frame.entity.updateLocation();
-                System.out.println("here");
+                
                 try {
                     Thread.sleep(30);
                 } catch (InterruptedException e) {
