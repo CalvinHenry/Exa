@@ -1,5 +1,5 @@
-import java.awt.Point;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,10 +9,11 @@ import javax.imageio.ImageIO;
 
 public class Entity {
 	
-	private Point location; //(x, y)
-	private Point momentum; //(velocity, r[degrees])
+	private Point2D.Double location = new Point2D.Double(500, 500); //(x, y)
+	public int shipAngle = 0; //angle the ship faces
 	private AffineTransform transform;
 	private BufferedImage image;
+	private Point2D.Double resultant = new Point2D.Double(0,0);
 	
 	public Entity(){
 		try {
@@ -21,37 +22,43 @@ public class Entity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		location = new Point(500,500);
-		momentum = new Point(0,0);
 	}
 	
-	public void updateLocation(){ //moves object according to momentum vector
-		location.x += (momentum.x * Math.cos(Math.toRadians(momentum.y)));
-		location.y -= momentum.x * Math.sin(Math.toRadians(momentum.y));
+	public void addForce(Point2D.Double force){
+		resultant.x += force.getX();
+		resultant.y -= force.getY();
+	}
+	
+	void updateLocation(){
+		location.x += resultant.x;
+		location.y += resultant.y;
 		updateTransform();
-		System.out.println(location);
-		System.out.println("Momentum: " + momentum);
 	}
-	public void accelerate(double change){
-		momentum.x += change;
-		if(momentum.x > 0){
-			momentum.x = 0;
-		}
-	}
+	
 	public void rotate(double change){
-		momentum.y += change;
-		while(momentum.y >= 360)
-			momentum.y -= 360;
+		shipAngle += change;
+		while(shipAngle >= 360)
+			shipAngle -= 360;
+		while(shipAngle <= 0)
+			shipAngle += 360;
 		updateTransform();
 	}
-	public int getXLocation(){
-		return location.x;
+	public double getXLocation(){
+		return location.getX();
 	}
-	public int getYLocation(){
-		return location.y;
+	public double getYLocation(){
+		return location.getY();
+	}
+	public double getResultant(String param){
+		if(param.equals("X")) return resultant.getX();
+		if(param.equals("Y")) return resultant.getY();
+		return 0.00;
+	}
+	public int getShipAngle(){
+		return shipAngle;
 	}
 	private void updateTransform(){
-		transform = AffineTransform.getRotateInstance(Math.toRadians(momentum.y), image.getWidth()/2,image.getHeight()/2);
+		transform = AffineTransform.getRotateInstance(Math.toRadians(shipAngle), image.getWidth()/2,image.getHeight()/2);
 	}
 	public BufferedImage getImage(){
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
