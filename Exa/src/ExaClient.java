@@ -1,9 +1,16 @@
+
+
+
+
+
+
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,12 +23,14 @@ public class ExaClient extends javax.swing.JFrame {
 
 
 	private static final long serialVersionUID = 1L;
-	Entity entity;
+	java.util.List<Integer> pressed = new java.util.ArrayList<Integer>();
+	static Entity entity;
+	final double MULT = .25;
 	Container pane;
 	Screen paint;
 	public ExaClient(Entity e){
 		this();
-		this.entity = new Entity();
+		entity = new Entity();
 		Repainter repaint = new Repainter(this);
 		repaint.start();
 	}
@@ -49,6 +58,15 @@ public class ExaClient extends javax.swing.JFrame {
 	
 	public static void main(String [] args){
 		(new ExaClient(new Entity())).setVisible(true);
+		while(true){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			entity.updateLocation();
+		}
 	}
 	
 	private class Screen extends JPanel implements KeyListener{
@@ -59,30 +77,21 @@ public class ExaClient extends javax.swing.JFrame {
 		public void paintComponent(Graphics g) {
 			
 			Graphics2D g2D = (Graphics2D)g.create();
-			g2D.drawImage(entity.getImage(), entity.getYLocation(), entity.getXLocation(), null);
+			g2D.drawImage(entity.getImage(), (int)entity.getYLocation(), (int)entity.getXLocation(), null);
 		}
 		
 		public void keyPressed(KeyEvent e) {
-		    int keyCode = e.getKeyCode();
-		    switch( keyCode ) { 
-		        case KeyEvent.VK_UP:
-		        	System.out.println("aaaay");
-		            entity.accelerate(-1);
-		            break;
-		        case KeyEvent.VK_DOWN:
-		            entity.accelerate(1);
-		            break;
-		        case KeyEvent.VK_LEFT:
-		            entity.rotate(-4);
-		            break;
-		        case KeyEvent.VK_RIGHT :
-		            entity.rotate(4);
-		            break;
-		     }
+			pressed.add(e.getKeyCode());
+		    for(int keyCode : pressed){
+		        if(keyCode == KeyEvent.VK_UP) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getShipAngle())), -MULT * Math.sin(Math.toRadians(entity.getShipAngle()))));
+		        if(keyCode == KeyEvent.VK_DOWN) entity.addForce(new Point2D.Double(-MULT * entity.getResultant("X"), -MULT * entity.getResultant("Y")));
+		        if(keyCode == KeyEvent.VK_LEFT) entity.rotate(3);
+		        if(keyCode == KeyEvent.VK_RIGHT) entity.rotate(-3);
+		    }
 		} 
 
 		public void keyReleased(KeyEvent e) {
-			
+			pressed.remove((Integer)e.getKeyCode());
 		}
 
 		public void keyTyped(KeyEvent e) {
