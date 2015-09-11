@@ -42,6 +42,8 @@ public class Entity {
 		while(shipAngle <= 0)
 			shipAngle += 360;
 		updateTransform();
+		System.out.println("change: " + change);
+		System.out.println("Angle: " + shipAngle);
 	}
 	public double getXLocation(){
 		return location.getX();

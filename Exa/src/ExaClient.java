@@ -58,15 +58,7 @@ public class ExaClient extends javax.swing.JFrame {
 	
 	public static void main(String [] args){
 		(new ExaClient(new Entity())).setVisible(true);
-		while(true){
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			entity.updateLocation();
-		}
+		
 	}
 	
 	private class Screen extends JPanel implements KeyListener{
@@ -85,13 +77,18 @@ public class ExaClient extends javax.swing.JFrame {
 		    for(int keyCode : pressed){
 		        if(keyCode == KeyEvent.VK_UP) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getShipAngle())), -MULT * Math.sin(Math.toRadians(entity.getShipAngle()))));
 		        if(keyCode == KeyEvent.VK_DOWN) entity.addForce(new Point2D.Double(-MULT * entity.getResultant("X"), -MULT * entity.getResultant("Y")));
-		        if(keyCode == KeyEvent.VK_LEFT) entity.rotate(3);
-		        if(keyCode == KeyEvent.VK_RIGHT) entity.rotate(-3);
+		        if(keyCode == KeyEvent.VK_LEFT) entity.rotate(-1);
+		        if(keyCode == KeyEvent.VK_RIGHT) entity.rotate(1);
 		    }
+		    
 		} 
 
 		public void keyReleased(KeyEvent e) {
-			pressed.remove((Integer)e.getKeyCode());
+			while(pressed.indexOf(e.getKeyCode()) != -1){
+				pressed.remove(pressed.indexOf(e.getKeyCode()));
+			}
+			
+			//pressed.remove((Integer)e.getKeyCode());
 		}
 
 		public void keyTyped(KeyEvent e) {
