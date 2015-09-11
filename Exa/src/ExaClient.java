@@ -76,7 +76,7 @@ public class ExaClient extends javax.swing.JFrame {
 			pressed.add(e.getKeyCode());
 		    for(int keyCode : pressed){
 		        if(keyCode == KeyEvent.VK_UP) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getShipAngle())), -MULT * Math.sin(Math.toRadians(entity.getShipAngle()))));
-		        if(keyCode == KeyEvent.VK_DOWN) entity.addForce(new Point2D.Double(-MULT * entity.getResultant("X"), -MULT * entity.getResultant("Y")));
+		        if(keyCode == KeyEvent.VK_DOWN) entity.applyBrake(1);
 		        if(keyCode == KeyEvent.VK_LEFT) entity.rotate(-1);
 		        if(keyCode == KeyEvent.VK_RIGHT) entity.rotate(1);
 		    }

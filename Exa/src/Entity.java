@@ -28,10 +28,32 @@ public class Entity {
 		resultant.x += force.getX();
 		resultant.y -= force.getY();
 	}
+	public void applyBrake(double magnitude){
+		
+		if(Math.abs(resultant.x) < magnitude){
+			resultant.x = 0;
+			
+		}else{
+			resultant.x -= magnitude * getSign(resultant.x);
+		}
+		if (Math.abs(resultant.y) < magnitude){
+			resultant.y = 0;
+		}else{
+
+			resultant.y -= magnitude * getSign(resultant.y);
+		}
+		
+		
+	}
 	
 	void updateLocation(){
 		location.x += resultant.x;
 		location.y += resultant.y;
+		System.out.print("x velocity: " + resultant.x);
+		System.out.println("    y velocity: " + resultant.y);
+		System.out.print("X Loc: " + location.x);
+		System.out.println("    Y Loc: " + location.y);
+		
 		updateTransform();
 	}
 	
@@ -42,8 +64,7 @@ public class Entity {
 		while(shipAngle <= 0)
 			shipAngle += 360;
 		updateTransform();
-		System.out.println("change: " + change);
-		System.out.println("Angle: " + shipAngle);
+		
 	}
 	public double getXLocation(){
 		return location.getX();
@@ -65,6 +86,12 @@ public class Entity {
 	public BufferedImage getImage(){
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 		return  op.filter(image, null);
+	}
+	/*
+	 * Returns -1 if x is positive, and positive 1 if x is negative
+	 */
+	public static double getSign(double x){
+		return Math.abs(x)/ x;
 	}
 	
 }
