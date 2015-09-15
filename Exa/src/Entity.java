@@ -10,7 +10,8 @@ import javax.imageio.ImageIO;
 public class Entity {
 	
 	private Point2D.Double location = new Point2D.Double(500, 500); //(x, y)
-	public int shipAngle = 0; //angle the ship faces
+	public double shipAngle = 0; //angle the ship faces
+	private double maxVelocity = 5;
 	private AffineTransform transform;
 	private BufferedImage image;
 	private Point2D.Double resultant = new Point2D.Double(0,0);
@@ -25,24 +26,18 @@ public class Entity {
 	}
 	
 	public void addForce(Point2D.Double force){
+		
 		resultant.x += force.getX();
 		resultant.y -= force.getY();
+		while(Math.abs(getResultant("")) >= maxVelocity){
+			resultant.x = approachZero(resultant.x, .1);
+			resultant.y = approachZero(resultant.y, .1);
+			
+		}
 	}
 	public void applyBrake(double magnitude){
-		
-		if(Math.abs(resultant.x) < magnitude){
-			resultant.x = 0;
-			
-		}else{
-			resultant.x -= magnitude * getSign(resultant.x);
-		}
-		if (Math.abs(resultant.y) < magnitude){
-			resultant.y = 0;
-		}else{
-
-			resultant.y -= magnitude * getSign(resultant.y);
-		}
-		
+		resultant.x = approachZero(resultant.x, magnitude);
+		resultant.y = approachZero(resultant.y, magnitude);
 		
 	}
 	
@@ -63,6 +58,8 @@ public class Entity {
 			shipAngle -= 360;
 		while(shipAngle <= 0)
 			shipAngle += 360;
+		
+		System.out.println("Angle: " + shipAngle);
 		updateTransform();
 		
 	}
@@ -75,9 +72,9 @@ public class Entity {
 	public double getResultant(String param){
 		if(param.equals("X")) return resultant.getX();
 		if(param.equals("Y")) return resultant.getY();
-		return 0.00;
+		return Math.sqrt(Math.pow(resultant.getX(), 2) + Math.pow(resultant.getY(), 2));
 	}
-	public int getShipAngle(){
+	public double getShipAngle(){
 		return shipAngle;
 	}
 	private void updateTransform(){
@@ -92,6 +89,15 @@ public class Entity {
 	 */
 	public static double getSign(double x){
 		return Math.abs(x)/ x;
+	}
+	public static double approachZero(double num, double magnitude){
+		System.out.println("here");
+		if(Math.abs(num) < magnitude){
+			num = 0;	
+		}else{
+			num -= magnitude * getSign(num);
+		}
+		return num;
 	}
 	
 }

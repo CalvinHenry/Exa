@@ -21,7 +21,8 @@ import javax.swing.JPanel;
 
 public class ExaClient extends javax.swing.JFrame {
 
-
+	
+	public boolean upHeld, downHeld, rightHeld, leftHeld;
 	private static final long serialVersionUID = 1L;
 	java.util.List<Integer> pressed = new java.util.ArrayList<Integer>();
 	static Entity entity;
@@ -72,24 +73,30 @@ public class ExaClient extends javax.swing.JFrame {
 			g2D.drawImage(entity.getImage(), (int)entity.getYLocation(), (int)entity.getXLocation(), null);
 		}
 		
+		public void listenToKeys(){
+	        if(upHeld) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getShipAngle())), -MULT * Math.sin(Math.toRadians(entity.getShipAngle()))));
+	        if(downHeld) entity.applyBrake(.2);
+	        if(leftHeld) entity.rotate(-1.5);
+	        if(rightHeld) entity.rotate(1.5);
+		}
+		
 		public void keyPressed(KeyEvent e) {
-			pressed.add(e.getKeyCode());
-		    for(int keyCode : pressed){
-		        if(keyCode == KeyEvent.VK_UP) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getShipAngle())), -MULT * Math.sin(Math.toRadians(entity.getShipAngle()))));
-		        if(keyCode == KeyEvent.VK_DOWN) entity.applyBrake(1);
-		        if(keyCode == KeyEvent.VK_LEFT) entity.rotate(-1);
-		        if(keyCode == KeyEvent.VK_RIGHT) entity.rotate(1);
-		    }
-		    
+			int keyCode = e.getKeyCode();
+		    if(keyCode == KeyEvent.VK_UP) upHeld = true;
+		    if(keyCode == KeyEvent.VK_DOWN) downHeld = true;;
+		    if(keyCode == KeyEvent.VK_LEFT) leftHeld = true;
+		    if(keyCode == KeyEvent.VK_RIGHT) rightHeld = true;
 		} 
 
 		public void keyReleased(KeyEvent e) {
-			while(pressed.indexOf(e.getKeyCode()) != -1){
-				pressed.remove(pressed.indexOf(e.getKeyCode()));
-			}
-			
+			int keyCode = e.getKeyCode();
+		    if(keyCode == KeyEvent.VK_UP) upHeld = false;
+		    if(keyCode == KeyEvent.VK_DOWN) downHeld = false;
+		    if(keyCode == KeyEvent.VK_LEFT) leftHeld = false;
+		    if(keyCode == KeyEvent.VK_RIGHT) rightHeld = false;
 			//pressed.remove((Integer)e.getKeyCode());
 		}
+
 
 		public void keyTyped(KeyEvent e) {
 			
@@ -108,7 +115,7 @@ public class ExaClient extends javax.swing.JFrame {
             	while(true){
                 frame.repaint();
                 frame.entity.updateLocation();
-                
+                frame.paint.listenToKeys();
                 try {
                     Thread.sleep(30);
                 } catch (InterruptedException e) {
