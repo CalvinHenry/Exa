@@ -29,15 +29,14 @@ public class Entity {
 		
 		resultant.x += force.getX();
 		resultant.y -= force.getY();
-		while(Math.abs(getResultant("")) >= maxVelocity){
-			resultant.x = approachZero(resultant.x, .1);
-			resultant.y = approachZero(resultant.y, .1);
-			
+		if (Math.abs(getMagnitude()) > maxVelocity){
+			resultant.x = resultant.x / getMagnitude() * maxVelocity;
+			resultant.y = resultant.y / getMagnitude() * maxVelocity;
 		}
 	}
-	public void applyBrake(double magnitude){
-		resultant.x = approachZero(resultant.x, magnitude);
-		resultant.y = approachZero(resultant.y, magnitude);
+	public void applyBrake(double amount){
+		resultant.x = approachZero(resultant.x, amount);
+		resultant.y = approachZero(resultant.y, amount);
 		
 	}
 	
@@ -69,10 +68,15 @@ public class Entity {
 	public double getYLocation(){
 		return location.getY();
 	}
+	
+	public double getMagnitude(){
+		return Math.sqrt(Math.pow(resultant.getX(), 2) + Math.pow(resultant.getY(), 2));
+	}
+	
 	public double getResultant(String param){
 		if(param.equals("X")) return resultant.getX();
 		if(param.equals("Y")) return resultant.getY();
-		return Math.sqrt(Math.pow(resultant.getX(), 2) + Math.pow(resultant.getY(), 2));
+		return 0.00;
 	}
 	public double getShipAngle(){
 		return shipAngle;
@@ -90,12 +94,11 @@ public class Entity {
 	public static double getSign(double x){
 		return Math.abs(x)/ x;
 	}
-	public static double approachZero(double num, double magnitude){
-		System.out.println("here");
-		if(Math.abs(num) < magnitude){
+	public static double approachZero(double num, double increment){
+		if(Math.abs(num) < increment){
 			num = 0;	
 		}else{
-			num -= magnitude * getSign(num);
+			num -= increment * getSign(num);
 		}
 		return num;
 	}
