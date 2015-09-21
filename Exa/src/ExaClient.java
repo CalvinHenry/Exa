@@ -8,27 +8,38 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class ExaClient extends javax.swing.JFrame {
-
-	
+	static ArrayList<Entity> map = new ArrayList<>();
+	static final String ADDRESS = "localhost";
+	static final int PORT = 8520;
 	public boolean upHeld, downHeld, rightHeld, leftHeld;
 	private static final long serialVersionUID = 1L;
 	java.util.List<Integer> pressed = new java.util.ArrayList<Integer>();
 	static Entity entity;
-	final double MULT = .25;
+	final double MULT = .35;
 	Container pane;
 	Screen paint;
+	ArrayList<Point> points = new ArrayList<>();
+	static Socket socket;
+	static ObjectInputStream in;
+	static ObjectOutputStream out;
 	public ExaClient(Entity e){
 		this();
 		entity = new Entity();
@@ -58,7 +69,20 @@ public class ExaClient extends javax.swing.JFrame {
 	
 	
 	public static void main(String [] args){
-		(new ExaClient(new Entity())).setVisible(true);
+		
+		
+		try {
+			socket = new Socket(ADDRESS, PORT);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());
+			(new ExaClient(new Entity())).setVisible(true);
+			while(true){
+				map = Constants.convertArrayListToEntity((ArrayList<Message>)in.readObject());
+				System.out.println("Reading in");
+			}
+		} catch (Exception e) {
+			
+		}
 		
 	}
 	
@@ -68,16 +92,31 @@ public class ExaClient extends javax.swing.JFrame {
 		}
 		
 		public void paintComponent(Graphics g) {
-			
+			System.out.println("here");
 			Graphics2D g2D = (Graphics2D)g.create();
-			g2D.drawImage(entity.getImage(), (int)entity.getYLocation(), (int)entity.getXLocation(), null);
+			for(int i = 0; i < map.size(); i ++){
+				Entity entity = map.get(i);
+				g2D.drawImage(entity.getImage(), (int)entity.getYLocation(), (int)entity.getXLocation(), null);
+			}
+			
+			
+			//System.out.println("Entity Loc x:" + entity.getXLocation() + " Y: " + entity.getYLocation() + "Point: X:" + points.get(points.size()- 1).x + " Y: " + points.get(points.size() - 1).y);
 		}
 		
 		public void listenToKeys(){
-	        if(upHeld) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getShipAngle())), -MULT * Math.sin(Math.toRadians(entity.getShipAngle()))));
+	        if(upHeld) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getEntityAngle())), -MULT * Math.sin(Math.toRadians(entity.getEntityAngle()))));
 	        if(downHeld) entity.applyBrake(.2);
 	        if(leftHeld) entity.rotate(-1.5);
 	        if(rightHeld) entity.rotate(1.5);
+	        
+	        try {
+	        	if(entity != null){
+	        		out.writeObject(new Message(entity));
+	        	}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		public void keyPressed(KeyEvent e) {
@@ -104,6 +143,7 @@ public class ExaClient extends javax.swing.JFrame {
 		
 	}
 	
+	 
 	private class Repainter extends Thread {
 		ExaClient frame;
         public Repainter(ExaClient frame) {
@@ -116,6 +156,7 @@ public class ExaClient extends javax.swing.JFrame {
                 frame.repaint();
                 frame.entity.updateLocation();
                 frame.paint.listenToKeys();
+                frame.points.add(new Point((int)frame.entity.getYLocation() + 105, (int)frame.entity.getXLocation() + 105));
                 try {
                     Thread.sleep(30);
                 } catch (InterruptedException e) {
