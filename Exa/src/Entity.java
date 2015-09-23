@@ -14,7 +14,7 @@ public class Entity{
 	public double entityAngle = 0; //angle the ship faces
 	private double maxVelocity = 7;
 	private AffineTransform transform;
-	private BufferedImage image;
+	private String imageType = "Qufeb";
 	private Point2D.Double resultant = new Point2D.Double(0,0);
 	
 	public Point2D.Double getLocation(){
@@ -25,24 +25,17 @@ public class Entity{
 	}
 	
 	public Entity(Message m){
-		location = m.location;
-		resultant = m.resultant;
+		location = new Point2D.Double(m.location.getX(), m.location.getY());
+		resultant = new Point2D.Double(m.resultant.getX(), m.resultant.getY());
 		entityAngle = m.shipAngle;
-		try {
-			image = ImageIO.read(new File((getClass().getResource("Recourses/Qufeb.png").getPath())));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	public Entity(){
-		try {
-			image = ImageIO.read(new File((getClass().getResource("Recourses/Qufeb.png").getPath())));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+	}
+	
+	public String getImageType(){
+		return imageType;
 	}
 	
 	public void addForce(Point2D.Double force){
@@ -99,9 +92,23 @@ public class Entity{
 		return entityAngle;
 	}
 	private void updateTransform(){
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File((getClass().getResource("Recourses/" + imageType + ".png").getPath())));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		transform = AffineTransform.getRotateInstance(Math.toRadians(entityAngle), image.getWidth()/2,image.getHeight()/2);
 	}
 	public BufferedImage getImage(){
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File((getClass().getResource("Recourses/" + imageType + ".png").getPath())));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		updateTransform();
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 		return  op.filter(image, null);
@@ -125,7 +132,7 @@ public class Entity{
 		temp.entityAngle = entityAngle;
 		temp.location = location;
 		temp.resultant = resultant;
-		temp.image = image;
+		temp.imageType = imageType;
 		return temp;
 	}
 	

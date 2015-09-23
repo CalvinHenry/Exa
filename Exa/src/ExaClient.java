@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -77,7 +71,7 @@ public class ExaClient extends javax.swing.JFrame {
 			in = new ObjectInputStream(socket.getInputStream());
 			(new ExaClient(new Entity())).setVisible(true);
 			while(true){
-				map = Constants.convertArrayListToEntity((ArrayList<Message>)in.readObject());
+				map = Constants.messageToEntity((ArrayList<Message>)in.readObject());
 				System.out.println("Reading in");
 			}
 		} catch (Exception e) {

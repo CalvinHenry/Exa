@@ -10,13 +10,13 @@ public class ExaServer {
 	
 	static ArrayList<Player> players;
 	static ArrayList<Entity> map;
+	final int SLEEP_TIME = 25;
 	public static void main(String[] args) {
-		
 		new ExaServer();
 	}
 	public ExaServer(){
-		players = new ArrayList<>();
-		map = new ArrayList<>();
+		players = new ArrayList<Player>();
+		map = new ArrayList<Entity>();
 		new Listener().start();
 		runGame();
 	}
@@ -24,7 +24,7 @@ public class ExaServer {
 		System.out.println("Server Running");
 		while(true){
 			try {
-				Thread.sleep(25);
+				Thread.sleep(SLEEP_TIME);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -36,7 +36,7 @@ public class ExaServer {
 			}
 			for(int i = 0; i < players.size(); i ++){
 				try {
-					players.get(i).getOutput().writeObject(Constants.convertArrayListToMessage(map));
+					players.get(i).getOutput().writeObject(Constants.entityToMessage(map));
 					System.out.println("here");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -89,9 +89,7 @@ public class ExaServer {
 		public ObjectOutputStream getOutput(){
 			return output;
 		}
-		public Entity getEntity(){
-			return entity;
-		}
+
 		public void run(){
 			Entity temp;
 			while(true){

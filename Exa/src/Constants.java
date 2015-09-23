@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Including math operators, and other static methods needed in multiple classes
  */
 public class Constants {
-	public static ArrayList<Message> convertArrayListToMessage(ArrayList<Entity> list){
+	public static ArrayList<Message> entityToMessage(ArrayList<Entity> list){
 		ArrayList<Message> retrn = new ArrayList<>();
 		for(int i = 0; i < list.size(); i ++){
 			retrn.add(new Message(list.get(i)));
@@ -13,7 +13,7 @@ public class Constants {
 		return retrn;
 	}
 	
-	public static ArrayList<Entity> convertArrayListToEntity(ArrayList<Message> list){
+	public static ArrayList<Entity> messageToEntity(ArrayList<Message> list){
 		ArrayList<Entity> retrn = new ArrayList<>();
 		for(int i = 0; i < list.size(); i ++){
 			retrn.add(new Entity(list.get(i)));
