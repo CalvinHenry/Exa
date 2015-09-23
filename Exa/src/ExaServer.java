@@ -4,19 +4,21 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ExaServer {
 	
 	
 	static ArrayList<Player> players;
-	static ArrayList<Entity> map;
+	static java.util.List map;
 	final int SLEEP_TIME = 25;
+	final int MAX_PLAYERS = 30;
 	public static void main(String[] args) {
 		new ExaServer();
 	}
 	public ExaServer(){
 		players = new ArrayList<Player>();
-		map = new ArrayList<Entity>();
+		map = Collections.synchronizedList(new ArrayList<Entity>());
 		new Listener().start();
 		runGame();
 	}
@@ -31,7 +33,7 @@ public class ExaServer {
 			}
 			System.out.println("Players connected: " + players.size());
 			for(int i = 0; i < map.size(); i ++){
-				map.get(i).updateLocation();
+				((Entity)(map.get(i))).updateLocation();
 				System.out.println("suck here");
 			}
 			for(int i = 0; i < players.size(); i ++){

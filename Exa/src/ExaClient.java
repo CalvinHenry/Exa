@@ -48,17 +48,12 @@ public class ExaClient extends javax.swing.JFrame {
         setExtendedState(Frame.MAXIMIZED_BOTH);
         
         pane = getContentPane();
-
         paint = new Screen();
 
         pane.add(paint);
         paint.setFocusable(true);
         
         paint.requestFocus();
-       
-        
-
-		
 	}
 	
 	
