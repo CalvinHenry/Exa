@@ -14,7 +14,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,6 +22,8 @@ public class ExaClient extends javax.swing.JFrame {
 	static ArrayList<Entity> map = new ArrayList<>();
 	static final String ADDRESS = "localhost";
 	static final int PORT = 8520;
+	static final int WINDOW_X = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+	static final int WINDOW_Y = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 	public boolean upHeld, downHeld, rightHeld, leftHeld;
 	private static final long serialVersionUID = 1L;
 	java.util.List<Integer> pressed = new java.util.ArrayList<Integer>();
@@ -84,11 +85,10 @@ public class ExaClient extends javax.swing.JFrame {
 			System.out.println("here");
 			Graphics2D g2D = (Graphics2D)g.create();
 			for(int i = 0; i < map.size(); i ++){
-				Entity entity = map.get(i);
-				g2D.drawImage(entity.getImage(), (int)entity.getYLocation(), (int)entity.getXLocation(), null);
+				Entity theEntity = map.get(i);
+				if(entity.equals(theEntity)) g2D.drawImage(theEntity.getImage(), WINDOW_X /2, WINDOW_Y / 2, null);
+				g2D.drawImage(theEntity.getImage(), (int)(theEntity.getLocation().getY() - entity.getLocation().getY() + (WINDOW_Y / 2)), (int)(theEntity.getLocation().getX() - entity.getLocation().getX() + (WINDOW_X / 2)), null);
 			}
-			
-			
 			//System.out.println("Entity Loc x:" + entity.getXLocation() + " Y: " + entity.getYLocation() + "Point: X:" + points.get(points.size()- 1).x + " Y: " + points.get(points.size() - 1).y);
 		}
 		
