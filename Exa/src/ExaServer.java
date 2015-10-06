@@ -11,8 +11,10 @@ public class ExaServer {
 	
 	static ArrayList<Player> players;
 	static java.util.List map;
-	final int SLEEP_TIME = 25;
+	final int SLEEP_TIME = 70;
 	final int MAX_PLAYERS = 30;
+	static int counter = 0;
+	
 	public static void main(String[] args) {
 		new ExaServer();
 	}
@@ -20,6 +22,7 @@ public class ExaServer {
 		players = new ArrayList<Player>();
 		map = Collections.synchronizedList(new ArrayList<Entity>());
 		new Listener().start();
+		new Updater().start();
 		runGame();
 	}
 	public void runGame(){
@@ -32,10 +35,7 @@ public class ExaServer {
 				e1.printStackTrace();
 			}
 			System.out.println("Players connected: " + players.size());
-			for(int i = 0; i < map.size(); i ++){
-				((Entity)(map.get(i))).updateLocation();
-				System.out.println("suck here");
-			}
+			
 			for(int i = 0; i < players.size(); i ++){
 				try {
 					players.get(i).getOutput().writeObject(Constants.entityToMessage(map));
@@ -71,25 +71,56 @@ public class ExaServer {
 		}
 
 	}
+	private class Updater extends Thread{
+		public void run(){
+			while(true){
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("Updating");
+			for(int i = 0; i < map.size(); i ++){
+				try{
+				((Entity)(map.get(i))).updateLocation();
+				System.out.println(((Entity)(map.get(i))).getResultant());
+				System.out.println(((Entity)(map.get(i))).getLocation());
+				}catch(Exception e){
+					System.out.println("There as been a small blip in program productivity. Please hold, and your space journey should resume shortly. In fact, it probably resumed before you had time to process that these words appeard on the screen.");
+				}
+				}
+			}
+		}
+		
+	}
 	private class Player extends Thread{
 		private Entity entity;
 		private Socket socket;
 		private ObjectOutputStream output;
 		private ObjectInputStream input;
+		private int ID;
 		public Player(Socket socket){
 			System.out.println("Player added");
 			
+			this.ID = getID();
 			this.socket = socket;
 			try{
 				output = new ObjectOutputStream(socket.getOutputStream());
 				input = new ObjectInputStream(socket.getInputStream());
+				output.writeInt(ID);
 			}catch(Exception e){
 				
 			}
+			
 			players.add(this);
 		}
 		public ObjectOutputStream getOutput(){
 			return output;
+		}
+		
+		public int getID(){
+			return counter++;
 		}
 
 		public void run(){

@@ -9,11 +9,13 @@ public class Message implements Serializable{
 	public double shipAngle = 0; //angle the ship faces
 	public Point2D.Double resultant = new Point2D.Double(0,0);
 	public String imageType;
+	public int ID;
 	
 	public Message(Entity e){
 		location = new Point2D.Double(e.getLocation().getX(), e.getLocation().getY());
 		resultant = new Point2D.Double(e.getResultant().getX(), e.getResultant().getY());
 		shipAngle = e.getEntityAngle();
 		imageType = e.getImageType();
+		ID = e.ID;
 	}
 }

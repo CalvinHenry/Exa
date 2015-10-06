@@ -16,9 +16,12 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ExaClient extends javax.swing.JFrame {
+	static int ID;
+	static ExaClient client;
 	static ArrayList<Entity> map = new ArrayList<>();
 	static final String ADDRESS = "localhost";
 	static final int PORT = 8520;
@@ -27,7 +30,7 @@ public class ExaClient extends javax.swing.JFrame {
 	public boolean upHeld, downHeld, rightHeld, leftHeld;
 	private static final long serialVersionUID = 1L;
 	java.util.List<Integer> pressed = new java.util.ArrayList<Integer>();
-	static Entity entity;
+	static Entity playerShip;
 	final double MULT = .35;
 	Container pane;
 	Screen paint;
@@ -37,11 +40,23 @@ public class ExaClient extends javax.swing.JFrame {
 	static ObjectOutputStream out;
 	public ExaClient(Entity e){
 		this();
-		entity = new Entity();
-		Repainter repaint = new Repainter(this);
-		repaint.start();
+		playerShip = new Entity();
+		
 	}
-	
+	public void start(){
+		Repainter repaint = new Repainter(this);
+		Talker talk = new Talker();
+		repaint.start();
+		talk.start();
+	}
+	private static String getServerAddress() {
+        return JOptionPane.showInputDialog(
+            client,
+            "Enter IP Address of the Server:",
+            "Welcome to EXA",
+            JOptionPane.QUESTION_MESSAGE);
+    }
+
 	public ExaClient(){
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -62,10 +77,14 @@ public class ExaClient extends javax.swing.JFrame {
 		
 		
 		try {
-			socket = new Socket(ADDRESS, PORT);
+			
+			( client = new ExaClient(new Entity())).setVisible(true);
+			socket = new Socket(getServerAddress(), PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
-			(new ExaClient(new Entity())).setVisible(true);
+			client.start();
+			ID = in.readInt();
+			playerShip.setID(ID);
 			while(true){
 				map = Constants.messageToEntity((ArrayList<Message>)in.readObject());
 				System.out.println("Reading in");
@@ -75,6 +94,11 @@ public class ExaClient extends javax.swing.JFrame {
 		}
 		
 	}
+	public void updateMap(){
+		for(int i = 0; i < map.size(); i ++){
+			map.get(i).updateLocation();
+		}
+	}
 	
 	private class Screen extends JPanel implements KeyListener{
 		public Screen(){
@@ -82,30 +106,27 @@ public class ExaClient extends javax.swing.JFrame {
 		}
 		
 		public void paintComponent(Graphics g) {
+			updateMap();
 			System.out.println("here");
 			Graphics2D g2D = (Graphics2D)g.create();
 			for(int i = 0; i < map.size(); i ++){
 				Entity theEntity = map.get(i);
-				if(entity.equals(theEntity)) g2D.drawImage(theEntity.getImage(), WINDOW_X /2, WINDOW_Y / 2, null);
-				g2D.drawImage(theEntity.getImage(), (int)(theEntity.getLocation().getY() - entity.getLocation().getY() + (WINDOW_Y / 2)), (int)(theEntity.getLocation().getX() - entity.getLocation().getX() + (WINDOW_X / 2)), null);
+				if(playerShip.entityEquals(theEntity)){
+					playerShip = theEntity.copy();
+					g2D.drawImage(theEntity.getImage(), WINDOW_X /2, WINDOW_Y / 2, null);
+				}
+				g2D.drawImage(theEntity.getImage(), (int)(theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2)), (int)(theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2)), null);
 			}
 			//System.out.println("Entity Loc x:" + entity.getXLocation() + " Y: " + entity.getYLocation() + "Point: X:" + points.get(points.size()- 1).x + " Y: " + points.get(points.size() - 1).y);
 		}
 		
 		public void listenToKeys(){
-	        if(upHeld) entity.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(entity.getEntityAngle())), -MULT * Math.sin(Math.toRadians(entity.getEntityAngle()))));
-	        if(downHeld) entity.applyBrake(.2);
-	        if(leftHeld) entity.rotate(-1.5);
-	        if(rightHeld) entity.rotate(1.5);
+	        if(upHeld) playerShip.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(playerShip.getEntityAngle())), -MULT * Math.sin(Math.toRadians(playerShip.getEntityAngle()))));
+	        if(downHeld) playerShip.applyBrake(.2);
+	        if(leftHeld) playerShip.rotate(-1.5);
+	        if(rightHeld) playerShip.rotate(1.5);
 	        
-	        try {
-	        	if(entity != null){
-	        		out.writeObject(new Message(entity));
-	        	}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	       
 		}
 		
 		public void keyPressed(KeyEvent e) {
@@ -131,6 +152,25 @@ public class ExaClient extends javax.swing.JFrame {
 		}
 		
 	}
+	private class Talker extends Thread{
+		public Talker(){
+			
+		}
+		public void run(){
+			while(true){
+			 try {
+				 Thread.sleep(70);
+		        	if(playerShip != null){
+		        		out.writeObject(new Message(playerShip));
+		        	}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
 	
 	 
 	private class Repainter extends Thread {
@@ -143,9 +183,9 @@ public class ExaClient extends javax.swing.JFrame {
         public void run() {
             	while(true){
                 frame.repaint();
-                frame.entity.updateLocation();
+                //frame.playerShip.updateLocation();
                 frame.paint.listenToKeys();
-                frame.points.add(new Point((int)frame.entity.getYLocation() + 105, (int)frame.entity.getXLocation() + 105));
+                frame.points.add(new Point((int)frame.playerShip.getYLocation() + 105, (int)frame.playerShip.getXLocation() + 105));
                 try {
                     Thread.sleep(30);
                 } catch (InterruptedException e) {

@@ -16,6 +16,14 @@ public class Entity{
 	private AffineTransform transform;
 	private String imageType = "Qufeb";
 	private Point2D.Double resultant = new Point2D.Double(0,0);
+	public int ID;
+	
+	public void setID(int i){
+		ID = i;
+	}
+	public boolean entityEquals(Entity e){
+		return ID == e.ID;
+	}
 	
 	public Point2D.Double getLocation(){
 		return location;
@@ -28,6 +36,7 @@ public class Entity{
 		location = new Point2D.Double(m.location.getX(), m.location.getY());
 		resultant = new Point2D.Double(m.resultant.getX(), m.resultant.getY());
 		entityAngle = m.shipAngle;
+		ID = m.ID;
 	}
 	
 	public Entity(){
@@ -94,7 +103,9 @@ public class Entity{
 	private void updateTransform(){
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File((getClass().getResource("Recourses/" + imageType + ".png").getPath())));
+			image = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
+			//image = ImageIO.read(new File((Constants.PATHH + imageType + ".png")));
+			//image = ImageIO.read(new File((getClass().getResource( imageType + ".png").getPath())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,7 +115,9 @@ public class Entity{
 	public BufferedImage getImage(){
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File((getClass().getResource("Recourses/" + imageType + ".png").getPath())));
+			image = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
+			//image = ImageIO.read(new File((Constants.PATHH + imageType + ".png")));
+			//image = ImageIO.read(new File((getClass().getResource( imageType + ".png").getPath())));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -133,6 +146,7 @@ public class Entity{
 		temp.location = location;
 		temp.resultant = resultant;
 		temp.imageType = imageType;
+		temp.ID = ID;
 		return temp;
 	}
 	
