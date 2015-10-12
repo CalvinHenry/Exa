@@ -14,7 +14,6 @@ public class Entity{
 	public double entityAngle = 0; //angle the ship faces
 	private double maxVelocity = 7;
 	private AffineTransform transform;
-	private String imageType = "Qufeb";
 	private Point2D.Double resultant = new Point2D.Double(0,0);
 	public int ID;
 	
@@ -26,6 +25,11 @@ public class Entity{
 	}
 	
 	public Point2D.Double getLocation(){
+		int x,y;
+		x = Constants.images[0].getHeight();
+		y = Constants.images[0].getWidth();
+
+		location = new Point2D.Double(location.getX() - x/2, location.getY() - y/2);
 		return location;
 	}
 	public Point2D.Double getResultant(){
@@ -46,10 +50,6 @@ public class Entity{
 	
 	public Entity(){
 		
-	}
-	
-	public String getImageType(){
-		return imageType;
 	}
 	
 	public void addForce(Point2D.Double force){
@@ -150,7 +150,6 @@ public class Entity{
 		temp.entityAngle = entityAngle;
 		temp.location = location;
 		temp.resultant = resultant;
-		temp.imageType = imageType;
 		temp.ID = ID;
 		return temp;
 	}

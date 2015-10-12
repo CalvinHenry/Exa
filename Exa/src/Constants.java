@@ -1,5 +1,6 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
@@ -9,8 +10,12 @@ import javax.imageio.ImageIO;
  */
 public class Constants {
 	
-	BufferedImage[] images = new BufferedImage[5]; //5 images to load
-	//images[0] =
+	public static BufferedImage[] images = new BufferedImage[5]; //5 images to load
+	
+	public Constants() throws IOException{
+		images[0] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
+	}
+	
 	public static ArrayList<Message> entityToMessage(java.util.List<Entity> list){
 		ArrayList<Message> retrn = new ArrayList<>();
 		for(int i = 0; i < list.size(); i ++){
@@ -25,10 +30,5 @@ public class Constants {
 			retrn.add(new Entity(list.get(i)));
 		}
 		return retrn;
-	}
-	
-	public static BufferedImage getImage(String imagetype) throws java.io.IOException{
-		if(imagetype.equals("Qufeb")) return ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
-		return null;
 	}
 }

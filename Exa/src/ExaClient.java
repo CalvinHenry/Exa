@@ -75,6 +75,12 @@ public class ExaClient extends javax.swing.JFrame {
 	
 	
 	public static void main(String [] args){
+		try {
+			new Constants();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		
 		try {
