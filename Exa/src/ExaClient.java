@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ExaClient extends javax.swing.JFrame {
+	static int updateCount = 0;
 	static int ID;
 	static ExaClient client;
 	static ArrayList<Entity> map = new ArrayList<>();
@@ -87,7 +88,7 @@ public class ExaClient extends javax.swing.JFrame {
 			playerShip.setID(ID);
 			while(true){
 				map = Constants.messageToEntity((ArrayList<Message>)in.readObject());
-				System.out.println("Reading in");
+				//System.out.println("Reading in");
 			}
 		} catch (Exception e) {
 			
@@ -95,9 +96,13 @@ public class ExaClient extends javax.swing.JFrame {
 		
 	}
 	public void updateMap(){
+		updateCount ++;
+		//System.out.println(updateCount);
 		for(int i = 0; i < map.size(); i ++){
 			map.get(i).updateLocation();
+			
 		}
+		playerShip.updateLocation();
 	}
 	
 	private class Screen extends JPanel implements KeyListener{
@@ -107,17 +112,16 @@ public class ExaClient extends javax.swing.JFrame {
 		
 		public void paintComponent(Graphics g) {
 			updateMap();
-			System.out.println("here");
+			////System.out.println("here");
 			Graphics2D g2D = (Graphics2D)g.create();
 			for(int i = 0; i < map.size(); i ++){
 				Entity theEntity = map.get(i);
 				if(playerShip.entityEquals(theEntity)){
-					playerShip = theEntity.copy();
-					g2D.drawImage(theEntity.getImage(), WINDOW_X /2, WINDOW_Y / 2, null);
+					//playerShip = theEntity.copy();
+					g2D.drawImage(playerShip.getImage(), WINDOW_X /2, WINDOW_Y / 2, null);
 				}
 				g2D.drawImage(theEntity.getImage(), (int)(theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2)), (int)(theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2)), null);
 			}
-			//System.out.println("Entity Loc x:" + entity.getXLocation() + " Y: " + entity.getYLocation() + "Point: X:" + points.get(points.size()- 1).x + " Y: " + points.get(points.size() - 1).y);
 		}
 		
 		public void listenToKeys(){
@@ -143,7 +147,7 @@ public class ExaClient extends javax.swing.JFrame {
 		    if(keyCode == KeyEvent.VK_DOWN) downHeld = false;
 		    if(keyCode == KeyEvent.VK_LEFT) leftHeld = false;
 		    if(keyCode == KeyEvent.VK_RIGHT) rightHeld = false;
-			//pressed.remove((Integer)e.getKeyCode());
+			
 		}
 
 
@@ -159,7 +163,7 @@ public class ExaClient extends javax.swing.JFrame {
 		public void run(){
 			while(true){
 			 try {
-				 Thread.sleep(70);
+				 Thread.sleep(40);
 		        	if(playerShip != null){
 		        		out.writeObject(new Message(playerShip));
 		        	}
@@ -187,9 +191,9 @@ public class ExaClient extends javax.swing.JFrame {
                 frame.paint.listenToKeys();
                 frame.points.add(new Point((int)frame.playerShip.getYLocation() + 105, (int)frame.playerShip.getXLocation() + 105));
                 try {
-                    Thread.sleep(30);
-                } catch (InterruptedException e) {
-                   // System.out.println("Thread Interupted");
+					Thread.sleep(20);
+				  } catch (InterruptedException e) {
+                   // //System.out.println("Thread Interupted");
                 }
             	}
             }

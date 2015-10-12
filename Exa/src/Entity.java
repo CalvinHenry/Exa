@@ -38,6 +38,11 @@ public class Entity{
 		entityAngle = m.shipAngle;
 		ID = m.ID;
 	}
+	public void set(Entity e){
+		location.setLocation(e.getLocation());
+		resultant.setLocation(e.getResultant());
+		entityAngle = e.getEntityAngle();
+	}
 	
 	public Entity(){
 		
