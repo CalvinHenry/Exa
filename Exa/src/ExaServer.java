@@ -11,7 +11,7 @@ public class ExaServer {
 	static int updateCount = 0;
 	static ArrayList<Player> players;
 	static java.util.List map;
-	final int SLEEP_TIME = 40;
+	final int SLEEP_TIME = 70;
 	final int MAX_PLAYERS = 30;
 	static int counter = 0;
 
@@ -31,7 +31,7 @@ public class ExaServer {
 		// System.out.println("Server Running");
 		while (true) {
 			try {
-				Thread.sleep(SLEEP_TIME);
+				Thread.sleep(Constants.Socket.SERVER_REFRESH);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -79,7 +79,7 @@ public class ExaServer {
 			while (true) {
 				updateCount++;
 				try {
-					Thread.sleep(20);
+					Thread.sleep(Constants.Socket.UPDATE_TIME);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

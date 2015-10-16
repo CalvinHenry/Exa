@@ -9,6 +9,14 @@ import javax.imageio.ImageIO;
  */
 public class Constants {
 	
+	public static class Socket {
+		public static final int UPDATE_TIME = 10;
+		public static final int SERVER_REFRESH = 150;
+		public static final int CLIENT_REFRESH = 140;
+		public static final int CYCLES_TO_SERVER_UPDATE = SERVER_REFRESH / UPDATE_TIME; //The number of times the client refreshes the screen before the server sends an update
+		
+	}
+	
 	BufferedImage[] images = new BufferedImage[5]; //5 images to load
 	//images[0] =
 	public static ArrayList<Message> entityToMessage(java.util.List<Entity> list){
