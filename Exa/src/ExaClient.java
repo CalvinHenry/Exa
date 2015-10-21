@@ -107,6 +107,7 @@ public class ExaClient extends javax.swing.JFrame {
 					localMap.get(j).setResultant(serverMap.get(i).getResultant());
 					localMap.get(j).setDifference(new Point2D.Double(localMap.get(j).getLocation().x - serverMap.get(i).getLocation().x, localMap.get(j).getLocation().y - serverMap.get(i).getLocation().y));
 					localMap.get(j).setAngleDifference(localMap.get(j).getEntityAngle() - serverMap.get(i).getEntityAngle());
+					localMap.get(j).inSync = false;
 					foundEntity = true;
 				}
 			}
@@ -118,13 +119,22 @@ public class ExaClient extends javax.swing.JFrame {
 
 	public void updateMap() {
 		
-		double xDifference;
-		double yDifference;
 		
 		updateCount++;
 		// System.out.println(updateCount);
 		localMap = updateMap(localMap);
 		serverMap = updateMap(serverMap);
+		
+		for (int i = 0; i < serverMap.size(); i++) {
+			
+			for (int j = 0; j < localMap.size(); j++) {
+				if (serverMap.get(i).entityEquals(localMap.get(j))) {
+					
+				}
+			}
+			
+		}
+		
 
 		
 

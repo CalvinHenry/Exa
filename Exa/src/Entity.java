@@ -19,6 +19,7 @@ public class Entity{
 	private Point2D.Double difference = new Point2D.Double(0,0); // The distance separating the client and server entity, only stored in the client, not used in server
 	private double shipAngleDifference = 0; //Same as above
 	public int ID;
+	public boolean inSync = false;
 	
 	public void setID(int i){
 		ID = i;
@@ -78,6 +79,8 @@ public class Entity{
 	void updateLocation(){
 		location.x += resultant.x;
 		location.y += resultant.y;
+		
+		
 		
 		location.x -= difference.x / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		location.y -= difference.y / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
