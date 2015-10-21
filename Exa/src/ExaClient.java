@@ -76,6 +76,7 @@ public class ExaClient extends javax.swing.JFrame {
 	}
 
 	public static void main(String[] args) {
+
 		try {
 
 			(client = new ExaClient(new Entity())).setVisible(true);

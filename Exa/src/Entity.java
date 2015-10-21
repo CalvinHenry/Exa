@@ -14,6 +14,7 @@ public class Entity{
 	public double entityAngle = 0; //angle the ship faces
 	private double maxVelocity = 7;
 	private AffineTransform transform;
+	private String imageType = "Qufeb";
 	private Point2D.Double resultant = new Point2D.Double(0,0);
 	private Point2D.Double difference = new Point2D.Double(0,0); // The distance separating the client and server entity, only stored in the client, not used in server
 	private double shipAngleDifference = 0; //Same as above
@@ -30,11 +31,6 @@ public class Entity{
 		this.resultant.setLocation(r);
 	}
 	public Point2D.Double getLocation(){
-		int x,y;
-		x = Constants.images[0].getHeight();
-		y = Constants.images[0].getWidth();
-
-		location = new Point2D.Double(location.getX() - x/2, location.getY() - y/2);
 		return location;
 	}
 	public Point2D.Double getResultant(){
@@ -55,6 +51,10 @@ public class Entity{
 	
 	public Entity(){
 		
+	}
+	
+	public String getImageType(){
+		return imageType;
 	}
 	public void setDifference(Point2D.Double differnce){
 		difference = differnce;
@@ -165,10 +165,10 @@ public class Entity{
 		temp.entityAngle = entityAngle;
 		temp.location = location;
 		temp.resultant = resultant;
+		temp.imageType = imageType;
 		temp.ID = ID;
 		return temp;
 	}
 	
 	
 }
-

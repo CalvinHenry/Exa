@@ -15,6 +15,7 @@ public class Message implements Serializable{
 		location = new Point2D.Double(e.getLocation().getX(), e.getLocation().getY());
 		resultant = new Point2D.Double(e.getResultant().getX(), e.getResultant().getY());
 		shipAngle = e.getEntityAngle();
+		imageType = e.getImageType();
 		ID = e.ID;
 	}
 }
