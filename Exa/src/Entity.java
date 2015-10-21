@@ -15,6 +15,8 @@ public class Entity{
 	private double maxVelocity = 7;
 	private AffineTransform transform;
 	private Point2D.Double resultant = new Point2D.Double(0,0);
+	private Point2D.Double difference = new Point2D.Double(0,0); // The distance separating the client and server entity, only stored in the client, not used in server
+	private double shipAngleDifference = 0; //Same as above
 	public int ID;
 	
 	public void setID(int i){
@@ -24,6 +26,9 @@ public class Entity{
 		return ID == e.ID;
 	}
 	
+	public void setResultant(Point2D.Double r){
+		this.resultant.setLocation(r);
+	}
 	public Point2D.Double getLocation(){
 		int x,y;
 		x = Constants.images[0].getHeight();
@@ -51,6 +56,9 @@ public class Entity{
 	public Entity(){
 		
 	}
+	public void setDifference(Point2D.Double differnce){
+		difference = differnce;
+	}
 	
 	public void addForce(Point2D.Double force){
 		
@@ -71,6 +79,10 @@ public class Entity{
 		location.x += resultant.x;
 		location.y += resultant.y;
 		
+		location.x -= difference.x / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
+		location.y -= difference.y / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
+		
+		entityAngle -= shipAngleDifference /Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		
 		updateTransform();
 	}
@@ -85,6 +97,9 @@ public class Entity{
 		System.out.println("Angle: " + entityAngle);
 		updateTransform();
 		
+	}
+	public void setAngleDifference(double diff){
+		shipAngleDifference = diff;
 	}
 	public double getXLocation(){
 		return location.getX();
