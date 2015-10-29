@@ -151,9 +151,10 @@ public class ExaClient extends javax.swing.JFrame {
 		}
 		
 		public BufferedImage getImageSelection(){		
+			System.out.println((int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)));
 			return background.getSubimage(
-					(int)(-1 * (playerShip.getLocation().getX() - (WINDOW_X)/2)), (int)(-1 * (playerShip.getLocation().getY() - (WINDOW_Y)/2)), 
-					WINDOW_X, WINDOW_Y);
+					 (int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)), (int)((playerShip.getLocation().getX() - (WINDOW_X)/2)), 
+					WINDOW_Y, WINDOW_X);
 			}
 
 		public void paintComponent(Graphics g) {
@@ -164,7 +165,7 @@ public class ExaClient extends javax.swing.JFrame {
 				Entity theEntity = localMap.get(i);
 				if (playerShip.entityEquals(theEntity)) {
 					// playerShip = theEntity.copy();
-					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2, WINDOW_X / 2, null);
+					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2 - playerShip.getImageHeight()/2, WINDOW_X / 2 - playerShip.getImageWidth()/2, null);
 
 				} else {
 					g2D.drawImage(theEntity.getImage(),
