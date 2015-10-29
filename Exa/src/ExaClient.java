@@ -41,6 +41,7 @@ public class ExaClient extends javax.swing.JFrame {
 	static Socket socket;
 	static ObjectInputStream in;
 	static ObjectOutputStream out;
+	static BufferedImage background;
 
 	public ExaClient(Entity e) {
 		this();
@@ -78,7 +79,7 @@ public class ExaClient extends javax.swing.JFrame {
 	public static void main(String[] args) {
 
 		try {
-
+			background = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
 			(client = new ExaClient(new Entity())).setVisible(true);
 			socket = new Socket(getServerAddress(), PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
@@ -134,10 +135,6 @@ public class ExaClient extends javax.swing.JFrame {
 			}
 			
 		}
-		
-
-		
-
 		playerShip.updateLocation();
 	}
 
@@ -152,11 +149,17 @@ public class ExaClient extends javax.swing.JFrame {
 		public Screen() {
 			addKeyListener(this);
 		}
+		
+		public BufferedImage getImageSelection(){		
+			return background.getSubimage(
+					(int)(-1 * (playerShip.getLocation().getX() - (WINDOW_X)/2)), (int)(-1 * (playerShip.getLocation().getY() - (WINDOW_Y)/2)), 
+					WINDOW_X, WINDOW_Y);
+			}
 
 		public void paintComponent(Graphics g) {
 			updateMap();
-			//// System.out.println("here");
 			Graphics2D g2D = (Graphics2D) g.create();
+			g2D.drawImage(getImageSelection(), 0, 0, null);
 			for (int i = 0; i < localMap.size(); i++) {
 				Entity theEntity = localMap.get(i);
 				if (playerShip.entityEquals(theEntity)) {

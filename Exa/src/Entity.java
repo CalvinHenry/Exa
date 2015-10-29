@@ -80,8 +80,6 @@ public class Entity{
 		location.x += resultant.x;
 		location.y += resultant.y;
 		
-		
-		
 		location.x -= difference.x / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		location.y -= difference.y / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		
@@ -92,10 +90,11 @@ public class Entity{
 	
 	public void rotate(double change){
 		entityAngle += change;
-		while(entityAngle >= 360)
+		/*while(entityAngle >= 360)
 			entityAngle -= 360;
 		while(entityAngle <= 0)
 			entityAngle += 360;
+			*/
 		
 		System.out.println("Angle: " + entityAngle);
 		updateTransform();
