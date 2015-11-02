@@ -20,7 +20,7 @@ public class Entity{
 	private double shipAngleDifference = 0; //Same as above
 	public int ID;
 	public boolean inSync = false;
-	
+	public BufferedImage image;
 	public void setID(int i){
 		ID = i;
 	}
@@ -43,6 +43,7 @@ public class Entity{
 		resultant = new Point2D.Double(m.resultant.getX(), m.resultant.getY());
 		entityAngle = m.shipAngle;
 		ID = m.ID;
+		image = Constants.images[1];
 	}
 	public void set(Entity e){
 		location.setLocation(e.getLocation());
@@ -51,7 +52,7 @@ public class Entity{
 	}
 	
 	public Entity(){
-		
+		image = Constants.images[1];
 	}
 	
 	public String getImageType(){
@@ -110,10 +111,12 @@ public class Entity{
 		return location.getY();
 	}
 	public int getImageHeight(){
-		return getImage().getHeight();
+		image = Constants.images[1];
+		return image.getHeight();
 	}
 	public int getImageWidth(){
-		return getImage().getWidth();
+		image = Constants.images[1];
+		return image.getWidth();
 	}
 	
 	public double getMagnitude(){
@@ -139,6 +142,7 @@ public class Entity{
 			e.printStackTrace();
 		}
 		transform = AffineTransform.getRotateInstance(Math.toRadians(entityAngle), image.getWidth()/2,image.getHeight()/2);
+		
 	}
 	public BufferedImage getImage(){
 		BufferedImage image = null;
@@ -152,6 +156,7 @@ public class Entity{
 		}
 		updateTransform();
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+		
 		return  op.filter(image, null);
 	}
 	/*

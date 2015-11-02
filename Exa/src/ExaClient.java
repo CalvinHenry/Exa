@@ -77,9 +77,10 @@ public class ExaClient extends javax.swing.JFrame {
 	}
 
 	public static void main(String[] args) {
-
+		
 		try {
-			background = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
+			Constants.initializeImages();
+			background = Constants.images[0];
 			(client = new ExaClient(new Entity())).setVisible(true);
 			socket = new Socket(getServerAddress(), PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
@@ -106,8 +107,12 @@ public class ExaClient extends javax.swing.JFrame {
 			for (int j = 0; j < localMap.size(); j++) {
 				if (serverMap.get(i).entityEquals(localMap.get(j))) {
 					localMap.get(j).setResultant(serverMap.get(i).getResultant());
-					localMap.get(j).setDifference(new Point2D.Double(localMap.get(j).getLocation().x - serverMap.get(i).getLocation().x, localMap.get(j).getLocation().y - serverMap.get(i).getLocation().y));
-					localMap.get(j).setAngleDifference(localMap.get(j).getEntityAngle() - serverMap.get(i).getEntityAngle());
+					localMap.get(j)
+							.setDifference(new Point2D.Double(
+									localMap.get(j).getLocation().x - serverMap.get(i).getLocation().x,
+									localMap.get(j).getLocation().y - serverMap.get(i).getLocation().y));
+					localMap.get(j)
+							.setAngleDifference(localMap.get(j).getEntityAngle() - serverMap.get(i).getEntityAngle());
 					localMap.get(j).inSync = false;
 					foundEntity = true;
 				}
@@ -119,21 +124,20 @@ public class ExaClient extends javax.swing.JFrame {
 	}
 
 	public void updateMap() {
-		
-		
+
 		updateCount++;
 		// System.out.println(updateCount);
 		localMap = updateMap(localMap);
 		serverMap = updateMap(serverMap);
-		
+
 		for (int i = 0; i < serverMap.size(); i++) {
-			
+
 			for (int j = 0; j < localMap.size(); j++) {
 				if (serverMap.get(i).entityEquals(localMap.get(j))) {
-					
+
 				}
 			}
-			
+
 		}
 		playerShip.updateLocation();
 	}
@@ -149,15 +153,15 @@ public class ExaClient extends javax.swing.JFrame {
 		public Screen() {
 			addKeyListener(this);
 		}
-		
-		public BufferedImage getImageSelection(){		
-			System.out.println((int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)));
-			try{
-			return background.getSubimage(
-					 (int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)), (int)((playerShip.getLocation().getX() - (WINDOW_X)/2)), 
-					WINDOW_Y, WINDOW_X);
-		}catch(java.awt.image.RasterFormatException err){
-			if()
+
+		public BufferedImage getImageSelection() {
+			System.out.println((int) ((playerShip.getLocation().getY() - (WINDOW_Y) / 2)));
+			try {
+				return background.getSubimage((int) ((playerShip.getLocation().getY() - (WINDOW_Y) / 2)),
+						(int) ((playerShip.getLocation().getX() - (WINDOW_X) / 2)), WINDOW_Y, WINDOW_X);
+			} catch (java.awt.image.RasterFormatException err) {
+				return null;
+			}
 		}
 
 		public void paintComponent(Graphics g) {
@@ -168,8 +172,10 @@ public class ExaClient extends javax.swing.JFrame {
 				Entity theEntity = localMap.get(i);
 				if (playerShip.entityEquals(theEntity)) {
 					// playerShip = theEntity.copy();
-					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2 - playerShip.getImageHeight()/2, WINDOW_X / 2 - playerShip.getImageWidth()/2, null);
-
+					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2 - playerShip.getImageHeight() / 2,
+							WINDOW_X / 2 - playerShip.getImageWidth() / 2, null);
+					
+					
 				} else {
 					g2D.drawImage(theEntity.getImage(),
 							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2)),

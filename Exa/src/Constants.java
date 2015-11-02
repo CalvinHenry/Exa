@@ -18,7 +18,9 @@ public class Constants {
 	 */
 	
 	public static void initializeImages() throws java.io.IOException{
-		images[0] = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png"));
+		images[0] = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
+		images[1] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
+		images[2] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/bigBoii.png")));
 	}
 	
 	public static class Socket {
