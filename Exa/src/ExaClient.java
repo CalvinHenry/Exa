@@ -152,10 +152,13 @@ public class ExaClient extends javax.swing.JFrame {
 		
 		public BufferedImage getImageSelection(){		
 			System.out.println((int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)));
+			try{
 			return background.getSubimage(
 					 (int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)), (int)((playerShip.getLocation().getX() - (WINDOW_X)/2)), 
 					WINDOW_Y, WINDOW_X);
-			}
+		}catch(java.awt.image.RasterFormatException err){
+			if()
+		}
 
 		public void paintComponent(Graphics g) {
 			updateMap();
