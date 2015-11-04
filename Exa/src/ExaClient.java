@@ -154,15 +154,35 @@ public class ExaClient extends javax.swing.JFrame {
 			addKeyListener(this);
 		}
 
-		public BufferedImage getImageSelection() {
-			System.out.println((int) ((playerShip.getLocation().getY() - (WINDOW_Y) / 2)));
-			try {
-				return background.getSubimage((int) ((playerShip.getLocation().getY() - (WINDOW_Y) / 2)),
-						(int) ((playerShip.getLocation().getX() - (WINDOW_X) / 2)), WINDOW_Y, WINDOW_X);
-			} catch (java.awt.image.RasterFormatException err) {
+		public BufferedImage getImageSelection(){
+			System.out.println(playerShip.getLocation());
+			try{
+			return background.getSubimage(
+					 (int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)), (int)((playerShip.getLocation().getX() - (WINDOW_X)/2)), 
+					WINDOW_Y, WINDOW_X);
+		}catch(java.awt.image.RasterFormatException err){
+			try{
+			System.out.println(playerShip.getLocation());
+			System.out.println(WINDOW_Y);
+			System.out.println(WINDOW_X);
+			if(playerShip.getLocation().getY() + (WINDOW_X/2) > background.getRaster().getHeight())
+				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
+			if(playerShip.getLocation().getY() - (WINDOW_X/2) < background.getRaster().getMinY())
+				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
+			if(playerShip.getLocation().getX() + (WINDOW_Y/2) > background.getRaster().getWidth())
+				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
+			if(playerShip.getLocation().getX() - (WINDOW_Y/2) < background.getRaster().getMinX())
+				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
+			return background.getSubimage(
+					 (int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)), (int)((playerShip.getLocation().getX() - (WINDOW_X)/2)), 
+					WINDOW_Y, WINDOW_X);
+			}catch(java.awt.image.RasterFormatException err1){
+				err1.printStackTrace();
+				System.exit(99);
 				return null;
 			}
 		}
+	}
 
 		public void paintComponent(Graphics g) {
 			updateMap();

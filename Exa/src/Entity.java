@@ -30,6 +30,10 @@ public class Entity{
 		image = Constants.images[4];
 	}
 	
+	public void setLocation(double x, double y){
+		this.location.x = x;
+		this.location.y = y;
+	}
 	public void setID(int i){
 		ID = i;
 	}
