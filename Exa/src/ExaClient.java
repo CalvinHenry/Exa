@@ -178,8 +178,8 @@ public class ExaClient extends javax.swing.JFrame {
 					
 				} else {
 					g2D.drawImage(theEntity.getImage(),
-							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2)),
-							(int) (theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2)),
+							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2) - theEntity.getImageHeight()/2),
+							(int) (theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2) - theEntity.getImageWidth()/2),
 							null);
 				}
 			}

@@ -21,6 +21,15 @@ public class Entity{
 	public int ID;
 	public boolean inSync = false;
 	public BufferedImage image;
+	
+	
+	public void loadImage(){
+		if(image != null){
+		
+		}
+		image = Constants.images[4];
+	}
+	
 	public void setID(int i){
 		ID = i;
 	}
@@ -43,7 +52,7 @@ public class Entity{
 		resultant = new Point2D.Double(m.resultant.getX(), m.resultant.getY());
 		entityAngle = m.shipAngle;
 		ID = m.ID;
-		image = Constants.images[1];
+		loadImage();
 	}
 	public void set(Entity e){
 		location.setLocation(e.getLocation());
@@ -52,7 +61,7 @@ public class Entity{
 	}
 	
 	public Entity(){
-		image = Constants.images[1];
+		loadImage();
 	}
 	
 	public String getImageType(){
@@ -111,11 +120,11 @@ public class Entity{
 		return location.getY();
 	}
 	public int getImageHeight(){
-		image = Constants.images[1];
+		loadImage();
 		return image.getHeight();
 	}
 	public int getImageWidth(){
-		image = Constants.images[1];
+		loadImage();
 		return image.getWidth();
 	}
 	
@@ -132,28 +141,15 @@ public class Entity{
 		return entityAngle;
 	}
 	private void updateTransform(){
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
-			//image = ImageIO.read(new File((Constants.PATHH + imageType + ".png")));
-			//image = ImageIO.read(new File((getClass().getResource( imageType + ".png").getPath())));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		
+			loadImage();
+			
 		transform = AffineTransform.getRotateInstance(Math.toRadians(entityAngle), image.getWidth()/2,image.getHeight()/2);
 		
 	}
 	public BufferedImage getImage(){
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
-			//image = ImageIO.read(new File((Constants.PATHH + imageType + ".png")));
-			//image = ImageIO.read(new File((getClass().getResource( imageType + ".png").getPath())));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		loadImage();
 		updateTransform();
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 		

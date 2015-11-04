@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
  */
 public class Constants {
 	
-	public static BufferedImage[] images = new BufferedImage[5];
+	public static BufferedImage[] images = new BufferedImage[20];
 	
 	/*
 	 * 0 - Qufeb
@@ -21,6 +21,9 @@ public class Constants {
 		images[0] = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
 		images[1] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
 		images[2] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/bigBoii.png")));
+		images[3] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Cepily.png")));
+		images[4] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Zax.png")));
+		images[5] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Skimo.png")));
 	}
 	
 	public static class Socket {
