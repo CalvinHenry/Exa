@@ -217,7 +217,7 @@ public class UpgradeGUI extends javax.swing.JFrame{
 
 	    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 	        //Continue to Game
-	    	new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), Integer.parseInt(labels[1].getText()), Integer.parseInt(labels[2].getText()), Integer.parseInt(labels[3].getText())));
+	    	new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), Integer.parseInt(labels[1].getText()), Integer.parseInt(labels[2].getText()), Integer.parseInt(labels[3].getText()))).setVisible(true);
 	    }                 
 	    
 	    private void initStuff(){
