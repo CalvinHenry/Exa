@@ -12,7 +12,7 @@ public class Entity{
 	
 	private Point2D.Double location = new Point2D.Double(5000, 5000); //(x, y)
 	public double entityAngle = 0; //angle the ship faces
-	private double maxVelocity = 7;
+	private double maxVelocity; //top speed
 	private AffineTransform transform;
 	private String imageType = "Qufeb";
 	private Point2D.Double resultant = new Point2D.Double(0,0);
@@ -49,6 +49,9 @@ public class Entity{
 	}
 	public Point2D.Double getResultant(){
 		return resultant;
+	}
+	public void setTopSpeed(int speed){
+		maxVelocity = speed;
 	}
 	
 	public Entity(Message m){
