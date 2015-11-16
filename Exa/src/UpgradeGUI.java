@@ -1,7 +1,10 @@
+import java.awt.Window;
+
 import javax.swing.BoundedRangeModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -217,7 +220,13 @@ public class UpgradeGUI extends javax.swing.JFrame{
 
 	    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 	        //Continue to Game
-	    	new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), Integer.parseInt(labels[1].getText()), Integer.parseInt(labels[2].getText()), Integer.parseInt(labels[3].getText()))).setVisible(true);
+	    	this.dispose();
+	    	
+	    	ExaClient ex = new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), 
+	    			Integer.parseInt(labels[1].getText()), Integer.parseInt(labels[2].getText()), 
+	    			Integer.parseInt(labels[3].getText())));
+	    	ex.setVisible(true);
+	    	
 	    }                 
 	    
 	    private void initStuff(){

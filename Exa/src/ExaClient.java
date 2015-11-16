@@ -45,8 +45,7 @@ public class ExaClient extends javax.swing.JFrame {
 
 	public ExaClient(Entity e) {
 		this();
-		playerShip = new Entity();
-
+		playerShip = e;
 	}
 
 	public void start() {
@@ -62,7 +61,7 @@ public class ExaClient extends javax.swing.JFrame {
 	}
 
 	public ExaClient() {
-
+		launch();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// main.setResizable(false);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -76,12 +75,12 @@ public class ExaClient extends javax.swing.JFrame {
 		paint.requestFocus();
 	}
 
-	public static void main(String[] args) {
+	public void launch() {
 		
 		try {
 			Constants.initializeImages();
 			background = Constants.images[0];
-			(client = new ExaClient(new Entity())).setVisible(true);
+			//(client = new ExaClient()).setVisible(true);
 			socket = new Socket(getServerAddress(), PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());

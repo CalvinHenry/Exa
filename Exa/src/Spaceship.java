@@ -6,8 +6,7 @@ public class Spaceship extends Entity {
 	private int shieldPotential; //regeneration rate
 	private int weaponPotential; //damage impacted by bullets
 	private int speedPotential; //top speed
-	
-	//comment for Calvin	
+		
 	public Spaceship(int h, int s, int w, int speed){
 		super();
 		this.healthPotential = h;

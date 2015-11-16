@@ -25,7 +25,7 @@ public class Entity{
 	
 	public void loadImage(){
 		if(image != null){
-		
+			System.out.println("Problem");
 		}
 		image = Constants.images[4];
 	}
