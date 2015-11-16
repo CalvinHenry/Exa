@@ -20,13 +20,14 @@ public class Entity{
 	private double shipAngleDifference = 0; //Same as above
 	public int ID;
 	public boolean inSync = false;
-	public BufferedImage image;
+	public BufferedImage image = null;
 	
 	
 	public void loadImage(){
-		if(image != null){
+		/*if(! (image.equals(null))){
 			System.out.println("Problem");
 		}
+		*/
 		image = Constants.images[4];
 	}
 	
@@ -150,7 +151,7 @@ public class Entity{
 	private void updateTransform(){
 		
 		
-			loadImage();
+		loadImage();
 			
 		transform = AffineTransform.getRotateInstance(Math.toRadians(entityAngle), image.getWidth()/2,image.getHeight()/2);
 		

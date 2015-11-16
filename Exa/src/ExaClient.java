@@ -43,11 +43,6 @@ public class ExaClient extends javax.swing.JFrame {
 	static ObjectOutputStream out;
 	static BufferedImage background;
 
-	public ExaClient(Entity e) {
-		this();
-		playerShip = e;
-	}
-
 	public void start() {
 		Repainter repaint = new Repainter(this);
 		Talker talk = new Talker();
@@ -60,43 +55,49 @@ public class ExaClient extends javax.swing.JFrame {
 				JOptionPane.QUESTION_MESSAGE);
 	}
 
-	public ExaClient() {
-		launch();
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		// main.setResizable(false);
-		setExtendedState(Frame.MAXIMIZED_BOTH);
-
-		pane = getContentPane();
-		paint = new Screen();
-
-		pane.add(paint);
-		paint.setFocusable(true);
-
-		paint.requestFocus();
-	}
-
-	public void launch() {
-		
+	public ExaClient(Spaceship s) {
 		try {
+			
+			playerShip = s;
 			Constants.initializeImages();
 			background = Constants.images[0];
-			//(client = new ExaClient()).setVisible(true);
+			setDefaultCloseOperation(EXIT_ON_CLOSE);
+			// main.setResizable(false);
+			setExtendedState(Frame.MAXIMIZED_BOTH);
+
+			pane = getContentPane();
+			paint = new Screen();
+
+			pane.add(paint);
+			paint.setFocusable(true);
+
+			paint.requestFocus();
+			
+			
+			System.out.println("YO1");
 			socket = new Socket(getServerAddress(), PORT);
+			System.out.println("YO2");
 			out = new ObjectOutputStream(socket.getOutputStream());
+			System.out.println("YO3");
 			in = new ObjectInputStream(socket.getInputStream());
-			client.start();
+			//client.start();
+			this.start();
 			ID = in.readInt();
 			playerShip.setID(ID);
+			System.out.println("YO4");
+			this.setVisible(true);
 			while (true) {
 				serverMap = Constants.messageToEntity((ArrayList<Message>) in.readObject());
 				initialClientUpdate();
 				inputCount++;
 				System.out.println(inputCount + "Reading in");
 			}
+			
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
-
+		
+		
 	}
 
 	public static void initialClientUpdate() {

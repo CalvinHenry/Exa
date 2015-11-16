@@ -17,13 +17,20 @@ public class Constants {
 	 * 2 - 
 	 */
 	
-	public static void initializeImages() throws java.io.IOException{
+	public static void initializeImages(){
+		
+		try{
 		images[0] = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
+		System.out.println("got here");
 		images[1] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
 		images[2] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/bigBoii.png")));
 		images[3] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Cepily.png")));
 		images[4] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Zax.png")));
 		images[5] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Skimo.png")));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static class Socket {
