@@ -54,6 +54,10 @@ public class ExaClient extends javax.swing.JFrame {
 		return JOptionPane.showInputDialog(client, "Enter IP Address of the Server:", "Welcome to EXA",
 				JOptionPane.QUESTION_MESSAGE);
 	}
+	
+	public void modifySpaceship(int a, int b, int c, int d){
+		//playerShip.setValues(a, b, c, d);
+	}
 
 	public ExaClient(Spaceship s) {
 		try {
@@ -85,13 +89,16 @@ public class ExaClient extends javax.swing.JFrame {
 			ID = in.readInt();
 			playerShip.setID(ID);
 			System.out.println("YO4");
-			this.setVisible(true);
+			//this.setVisible(true);
+			
+			//IF THIS CAN BE A NEW THREAD THAT WOULD BE FANTASTIC
 			while (true) {
 				serverMap = Constants.messageToEntity((ArrayList<Message>) in.readObject());
 				initialClientUpdate();
 				inputCount++;
 				System.out.println(inputCount + "Reading in");
 			}
+			//END NEW THREAD
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -16,6 +16,13 @@ public class Spaceship extends Entity {
 		setTopSpeed(speed);
 	}
 	
+	public void setValues(int a, int b, int c, int d){
+		healthPotential = a;
+		shieldPotential = b;
+		weaponPotential = c;
+		speedPotential = d;
+	}
+	
 	public void takeDamage(int damage){
 		health -= damage;
 	}

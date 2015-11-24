@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
  */
 public class Constants {
 	
+	ExaClient e;
+	
 	public static BufferedImage[] images = new BufferedImage[20];
 	
 	/*
@@ -31,6 +33,14 @@ public class Constants {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void makeNewClient(){
+		e = new ExaClient(new Spaceship(0,0,0,0));
+	}
+	
+	public ExaClient getClient(){
+		return e;
 	}
 	
 	public static class Socket {

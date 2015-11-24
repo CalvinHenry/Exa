@@ -15,6 +15,7 @@ public class UpgradeGUI extends javax.swing.JFrame{
 	private JSlider[] sliders;
 	private JLabel[] labels;
 	private JSlider moving = new JSlider();
+	private static Constants c;
 
 	    public UpgradeGUI() {
 	        initComponents();
@@ -25,13 +26,12 @@ public class UpgradeGUI extends javax.swing.JFrame{
 	    }
 	    
 	    public static void main(String [] args){
+	    	(c = new Constants()).makeNewClient();
 	    	new UpgradeGUI();
 	    }
                          
 	    private void initComponents() {
 	    	
-	    	
-
 	        jSlider1 = new javax.swing.JSlider();
 	        jSlider2 = new javax.swing.JSlider();
 	        jSlider3 = new javax.swing.JSlider();
@@ -61,7 +61,7 @@ public class UpgradeGUI extends javax.swing.JFrame{
 	        
 	        initStuff();
 
-	        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+	        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 	        jLabel1.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
 	        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -222,10 +222,13 @@ public class UpgradeGUI extends javax.swing.JFrame{
 	        //Continue to Game
 	    	this.dispose();
 	    	
-	    	ExaClient ex = new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), 
+	    	c.getClient().setVisible(true);
+	    	
+	    	/*ExaClient ex = new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), 
 	    			Integer.parseInt(labels[1].getText()), Integer.parseInt(labels[2].getText()), 
 	    			Integer.parseInt(labels[3].getText())));
 	    	ex.setVisible(true);
+	    	*/
 	    	
 	    }                 
 	    
