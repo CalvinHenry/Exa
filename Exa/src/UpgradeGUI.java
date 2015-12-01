@@ -221,7 +221,6 @@ public class UpgradeGUI extends javax.swing.JFrame{
 	    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 	        //Continue to Game
 	    	this.dispose();
-	    	
 	    	c.getClient().setVisible(true);
 	    	
 	    	/*ExaClient ex = new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), 

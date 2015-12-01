@@ -153,6 +153,9 @@ public class Entity{
 		
 		loadImage();
 			
+		System.out.println(entityAngle);
+		System.out.println(image);
+		System.out.println(transform);
 		transform = AffineTransform.getRotateInstance(Math.toRadians(entityAngle), image.getWidth()/2,image.getHeight()/2);
 		
 	}

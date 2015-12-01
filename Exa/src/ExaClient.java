@@ -43,6 +43,12 @@ public class ExaClient extends javax.swing.JFrame {
 	static ObjectOutputStream out;
 	static BufferedImage background;
 
+	public ExaClient(Entity e) {
+		this();
+		playerShip = new Entity();
+
+	}
+
 	public void start() {
 		Repainter repaint = new Repainter(this);
 		Talker talk = new Talker();
@@ -54,57 +60,44 @@ public class ExaClient extends javax.swing.JFrame {
 		return JOptionPane.showInputDialog(client, "Enter IP Address of the Server:", "Welcome to EXA",
 				JOptionPane.QUESTION_MESSAGE);
 	}
-	
-	public void modifySpaceship(int a, int b, int c, int d){
-		//playerShip.setValues(a, b, c, d);
+
+	public ExaClient() {
+
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// main.setResizable(false);
+		setExtendedState(Frame.MAXIMIZED_BOTH);
+
+		pane = getContentPane();
+		paint = new Screen();
+
+		pane.add(paint);
+		paint.setFocusable(true);
+
+		paint.requestFocus();
 	}
 
-	public ExaClient(Spaceship s) {
+	public static void main(String[] args) {
+
 		try {
-			
-			playerShip = s;
 			Constants.initializeImages();
-			background = Constants.images[0];
-			setDefaultCloseOperation(EXIT_ON_CLOSE);
-			// main.setResizable(false);
-			setExtendedState(Frame.MAXIMIZED_BOTH);
-
-			pane = getContentPane();
-			paint = new Screen();
-
-			pane.add(paint);
-			paint.setFocusable(true);
-
-			paint.requestFocus();
-			
-			
-			System.out.println("YO1");
+			background = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
+			(client = new ExaClient(new Entity())).setVisible(true);
 			socket = new Socket(getServerAddress(), PORT);
-			System.out.println("YO2");
 			out = new ObjectOutputStream(socket.getOutputStream());
-			System.out.println("YO3");
 			in = new ObjectInputStream(socket.getInputStream());
-			//client.start();
-			this.start();
+			client.start();
 			ID = in.readInt();
 			playerShip.setID(ID);
-			System.out.println("YO4");
-			//this.setVisible(true);
-			
-			//IF THIS CAN BE A NEW THREAD THAT WOULD BE FANTASTIC
 			while (true) {
 				serverMap = Constants.messageToEntity((ArrayList<Message>) in.readObject());
 				initialClientUpdate();
 				inputCount++;
 				System.out.println(inputCount + "Reading in");
 			}
-			//END NEW THREAD
-			
 		} catch (Exception e) {
-			e.printStackTrace();
+
 		}
-		
-		
+
 	}
 
 	public static void initialClientUpdate() {
@@ -114,12 +107,8 @@ public class ExaClient extends javax.swing.JFrame {
 			for (int j = 0; j < localMap.size(); j++) {
 				if (serverMap.get(i).entityEquals(localMap.get(j))) {
 					localMap.get(j).setResultant(serverMap.get(i).getResultant());
-					localMap.get(j)
-							.setDifference(new Point2D.Double(
-									localMap.get(j).getLocation().x - serverMap.get(i).getLocation().x,
-									localMap.get(j).getLocation().y - serverMap.get(i).getLocation().y));
-					localMap.get(j)
-							.setAngleDifference(localMap.get(j).getEntityAngle() - serverMap.get(i).getEntityAngle());
+					localMap.get(j).setDifference(new Point2D.Double(localMap.get(j).getLocation().x - serverMap.get(i).getLocation().x, localMap.get(j).getLocation().y - serverMap.get(i).getLocation().y));
+					localMap.get(j).setAngleDifference(localMap.get(j).getEntityAngle() - serverMap.get(i).getEntityAngle());
 					localMap.get(j).inSync = false;
 					foundEntity = true;
 				}
@@ -131,20 +120,21 @@ public class ExaClient extends javax.swing.JFrame {
 	}
 
 	public void updateMap() {
-
+		
+		
 		updateCount++;
 		// System.out.println(updateCount);
 		localMap = updateMap(localMap);
 		serverMap = updateMap(serverMap);
-
+		
 		for (int i = 0; i < serverMap.size(); i++) {
-
+			
 			for (int j = 0; j < localMap.size(); j++) {
 				if (serverMap.get(i).entityEquals(localMap.get(j))) {
-
+					
 				}
 			}
-
+			
 		}
 		playerShip.updateLocation();
 	}
@@ -160,53 +150,27 @@ public class ExaClient extends javax.swing.JFrame {
 		public Screen() {
 			addKeyListener(this);
 		}
-
-		public BufferedImage getImageSelection(){
-			System.out.println(playerShip.getLocation());
-			try{
+		
+		public BufferedImage getImageSelection(){		
 			return background.getSubimage(
-					 (int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)), (int)((playerShip.getLocation().getX() - (WINDOW_X)/2)), 
-					WINDOW_Y, WINDOW_X);
-		}catch(java.awt.image.RasterFormatException err){
-			try{
-			System.out.println(playerShip.getLocation());
-			System.out.println(WINDOW_Y);
-			System.out.println(WINDOW_X);
-			if(playerShip.getLocation().getY() + (WINDOW_X/2) > background.getRaster().getHeight())
-				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
-			if(playerShip.getLocation().getY() - (WINDOW_X/2) < background.getRaster().getMinY())
-				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
-			if(playerShip.getLocation().getX() + (WINDOW_Y/2) > background.getRaster().getWidth())
-				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
-			if(playerShip.getLocation().getX() - (WINDOW_Y/2) < background.getRaster().getMinX())
-				playerShip.setLocation(playerShip.getLocation().getX(), playerShip.getLocation().getY() - 10);
-			return background.getSubimage(
-					 (int)((playerShip.getLocation().getY() - (WINDOW_Y)/2)), (int)((playerShip.getLocation().getX() - (WINDOW_X)/2)), 
-					WINDOW_Y, WINDOW_X);
-			}catch(java.awt.image.RasterFormatException err1){
-				err1.printStackTrace();
-				System.exit(99);
-				return null;
+					(int)(-1 * (playerShip.getLocation().getX() - (WINDOW_X)/2)), (int)(-1 * (playerShip.getLocation().getY() - (WINDOW_Y)/2)), 
+					WINDOW_X, WINDOW_Y);
 			}
-		}
-	}
 
 		public void paintComponent(Graphics g) {
 			updateMap();
 			Graphics2D g2D = (Graphics2D) g.create();
-			g2D.drawImage(getImageSelection(), 0, 0, null);
+			//g2D.drawImage(getImageSelection(), 0, 0, null);
 			for (int i = 0; i < localMap.size(); i++) {
 				Entity theEntity = localMap.get(i);
 				if (playerShip.entityEquals(theEntity)) {
 					// playerShip = theEntity.copy();
-					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2 - playerShip.getImageHeight() / 2,
-							WINDOW_X / 2 - playerShip.getImageWidth() / 2, null);
-					
-					
+					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2, WINDOW_X / 2, null);
+
 				} else {
 					g2D.drawImage(theEntity.getImage(),
-							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2) - theEntity.getImageHeight()/2),
-							(int) (theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2) - theEntity.getImageWidth()/2),
+							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2)),
+							(int) (theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2)),
 							null);
 				}
 			}
