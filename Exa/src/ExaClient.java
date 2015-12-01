@@ -76,12 +76,18 @@ public class ExaClient extends javax.swing.JFrame {
 		paint.requestFocus();
 	}
 
-	public static void main(String[] args) {
-
+	public static void main (String [] args) {
+		System.out.println("Howdy");
+		UpgradeGUI ug = new UpgradeGUI();
+		System.out.println("Hi");
+		while(! ug.isFinished()){//wait until upgradeGUI is finished
+			if(ug.isFinished()) break;
+			else System.out.println("Still not done");
+		}
 		try {
 			Constants.initializeImages();
 			background = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
-			(client = new ExaClient(new Entity())).setVisible(true);
+			(client = new ExaClient(new Spaceship(ug.getNumbers()[0], ug.getNumbers()[1], ug.getNumbers()[2], ug.getNumbers()[3]))).setVisible(true);
 			socket = new Socket(getServerAddress(), PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());

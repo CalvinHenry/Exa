@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 public class Entity{
 	
-	private Point2D.Double location = new Point2D.Double(5000, 5000); //(x, y)
+	private Point2D.Double location = new Point2D.Double(500, 500); //(x, y)
 	public double entityAngle = 0; //angle the ship faces
 	private double maxVelocity; //top speed
 	private AffineTransform transform;

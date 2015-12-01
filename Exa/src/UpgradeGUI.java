@@ -9,27 +9,24 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-public class UpgradeGUI extends javax.swing.JFrame{
+public class UpgradeGUI extends javax.swing.JDialog{
 	
 	private final int TOTAL_POINTS = 200;
 	private JSlider[] sliders;
 	private JLabel[] labels;
 	private JSlider moving = new JSlider();
-	private static Constants c;
+	private boolean isFinished;
 
 	    public UpgradeGUI() {
 	        initComponents();
+	        isFinished = false;
 	        this.setVisible(true);
-	        while(true){
-	        	checkSliders();
+	        while(! isFinished()){
+	        	if(! isFinished())checkSliders();
+	        	else break;
 	        }
 	    }
-	    
-	    public static void main(String [] args){
-	    	(c = new Constants()).makeNewClient();
-	    	new UpgradeGUI();
-	    }
-                         
+	               
 	    private void initComponents() {
 	    	
 	        jSlider1 = new javax.swing.JSlider();
@@ -220,16 +217,21 @@ public class UpgradeGUI extends javax.swing.JFrame{
 
 	    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 	        //Continue to Game
+	    	isFinished = true;
 	    	this.dispose();
-	    	c.getClient().setVisible(true);
-	    	
-	    	/*ExaClient ex = new ExaClient(new Spaceship(Integer.parseInt(labels[0].getText()), 
-	    			Integer.parseInt(labels[1].getText()), Integer.parseInt(labels[2].getText()), 
-	    			Integer.parseInt(labels[3].getText())));
-	    	ex.setVisible(true);
-	    	*/
-	    	
-	    }                 
+	    }   
+	    
+	    public boolean isFinished(){
+	    	return isFinished;
+	    }
+	    
+	    public int[] getNumbers(){
+	    	int [] nums = new int[4];
+	    	for(int i = 0; i < 4; i++){
+	    		nums[i] = sliders[i].getValue();
+	    	}
+	    	return nums;
+	    }
 	    
 	    private void initStuff(){
 	    	sliders = new JSlider[4];
