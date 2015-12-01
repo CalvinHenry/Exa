@@ -88,11 +88,12 @@ public class ExaClient extends javax.swing.JFrame {
 			client.start();
 			ID = in.readInt();
 			playerShip.setID(ID);
+			playerShip.setTopSpeed(5);
 			while (true) {
 				serverMap = Constants.messageToEntity((ArrayList<Message>) in.readObject());
 				initialClientUpdate();
 				inputCount++;
-				System.out.println(inputCount + "Reading in");
+				//System.out.println(inputCount + "Reading in");
 			}
 		} catch (Exception e) {
 
@@ -165,12 +166,12 @@ public class ExaClient extends javax.swing.JFrame {
 				Entity theEntity = localMap.get(i);
 				if (playerShip.entityEquals(theEntity)) {
 					// playerShip = theEntity.copy();
-					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2, WINDOW_X / 2, null);
+					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2 - playerShip.getImageHeight()/2, WINDOW_X / 2 - playerShip.getImageWidth()/2, null);
 
 				} else {
 					g2D.drawImage(theEntity.getImage(),
-							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2)),
-							(int) (theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2)),
+							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2) - theEntity.getImageHeight()/2),
+							(int) (theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2) - theEntity.getImageHeight()/2),
 							null);
 				}
 			}

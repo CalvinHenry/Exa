@@ -100,7 +100,7 @@ public class Entity{
 		
 		location.x -= difference.x / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		location.y -= difference.y / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
-		
+		System.out.println(resultant);
 		entityAngle -= shipAngleDifference /Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		
 		updateTransform();
@@ -118,6 +118,7 @@ public class Entity{
 		updateTransform();
 		
 	}
+	
 	public void setAngleDifference(double diff){
 		shipAngleDifference = diff;
 	}
@@ -153,9 +154,7 @@ public class Entity{
 		
 		loadImage();
 			
-		System.out.println(entityAngle);
-		System.out.println(image);
-		System.out.println(transform);
+		
 		transform = AffineTransform.getRotateInstance(Math.toRadians(entityAngle), image.getWidth()/2,image.getHeight()/2);
 		
 	}
@@ -166,6 +165,7 @@ public class Entity{
 		
 		return  op.filter(image, null);
 	}
+	
 	/*
 	 * Returns -1 if x is positive, and positive 1 if x is negative
 	 */
