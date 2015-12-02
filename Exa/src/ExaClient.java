@@ -34,7 +34,7 @@ public class ExaClient extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
 	java.util.List<Integer> pressed = new java.util.ArrayList<Integer>();
 	static Entity playerShip;
-	final double MULT = .45;
+	final double MULT = .05;
 	Container pane;
 	Screen paint;
 	ArrayList<Point> points = new ArrayList<>();
@@ -94,7 +94,7 @@ public class ExaClient extends javax.swing.JFrame {
 			client.start();
 			ID = in.readInt();
 			playerShip.setID(ID);
-			playerShip.setTopSpeed(5);
+			playerShip.setTopSpeed(2);
 			while (true) {
 				serverMap = Constants.messageToEntity((ArrayList<Message>) in.readObject());
 				initialClientUpdate();
@@ -138,7 +138,8 @@ public class ExaClient extends javax.swing.JFrame {
 			
 			for (int j = 0; j < localMap.size(); j++) {
 				if (serverMap.get(i).entityEquals(localMap.get(j))) {
-					
+					localMap.get(j).setDifference(new Point2D.Double(localMap.get(j).getLocation().x - serverMap.get(i).getLocation().x, localMap.get(j).getLocation().y - serverMap.get(i).getLocation().y));
+					localMap.get(j).setAngleDifference(localMap.get(j).getEntityAngle() - serverMap.get(i).getEntityAngle());
 				}
 			}
 			
@@ -188,11 +189,11 @@ public class ExaClient extends javax.swing.JFrame {
 				playerShip.addForce(new Point2D.Double(-MULT * Math.cos(Math.toRadians(playerShip.getEntityAngle())),
 						-MULT * Math.sin(Math.toRadians(playerShip.getEntityAngle()))));
 			if (downHeld)
-				playerShip.applyBrake(.2);
+				playerShip.applyBrake(.01);
 			if (leftHeld)
-				playerShip.rotate(-2);
+				playerShip.rotate(-1);
 			if (rightHeld)
-				playerShip.rotate(2);
+				playerShip.rotate(1);
 
 		}
 

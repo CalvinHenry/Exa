@@ -45,8 +45,8 @@ public class Constants {
 	
 	public static class Socket {
 		public static final int UPDATE_TIME = 10;
-		public static final int SERVER_REFRESH = 150;
-		public static final int CLIENT_REFRESH = 140;
+		public static final int SERVER_REFRESH = 100;
+		public static final int CLIENT_REFRESH = 100;
 		public static final int CYCLES_TO_SERVER_UPDATE = SERVER_REFRESH / (2 * UPDATE_TIME); //The number of times the client refreshes the screen before the server sends an update
 	}
 	public static ArrayList<Message> entityToMessage(java.util.List<Entity> list){
