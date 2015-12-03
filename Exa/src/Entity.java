@@ -56,16 +56,33 @@ public class Entity{
 	}
 	
 	public Entity(Message m){
+		this();
 		location = new Point2D.Double(m.location.getX(), m.location.getY());
 		resultant = new Point2D.Double(m.resultant.getX(), m.resultant.getY());
 		entityAngle = m.shipAngle;
 		ID = m.ID;
+		//System.out.println("ID: " + ID);
 		loadImage();
+	}
+	public static Entity getNewEntity(Message m){
+		if(m.object.equals("Entity")){
+			return new Entity(m);
+		}else if(m.object.equals("Spaceship")){
+			return new Spaceship((SpaceshipMessage)m);
+		}else if(m.object.equals("Bullet")){
+			return new Bullet((BulletMessage)m);
+		}
+		return null;
+	}
+	public Entity(Entity e){
+		this();
+		set(e);
 	}
 	public void set(Entity e){
 		location.setLocation(e.getLocation());
 		resultant.setLocation(e.getResultant());
 		entityAngle = e.getEntityAngle();
+		ID = e.ID;
 	}
 	
 	public Entity(){
@@ -100,7 +117,7 @@ public class Entity{
 		
 		location.x -= difference.x / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		location.y -= difference.y / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
-		System.out.println(resultant);
+		
 		entityAngle -= shipAngleDifference /Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		
 		updateTransform();
@@ -114,7 +131,7 @@ public class Entity{
 			entityAngle += 360;
 			*/
 		
-		System.out.println("Angle: " + entityAngle);
+		
 		updateTransform();
 		
 	}
@@ -188,6 +205,16 @@ public class Entity{
 		temp.imageType = imageType;
 		temp.ID = ID;
 		return temp;
+	}
+	public String getType(){
+		return "Entity";
+	}
+	public String toString(){
+		String s = location.toString();
+		s += " Angle:  " + entityAngle;
+		s += "Playership: " + (this.entityEquals(ExaClient.playerShip));
+		s += "ID: " + ID;
+		return s;
 	}
 	
 	

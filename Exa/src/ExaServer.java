@@ -14,7 +14,7 @@ public class ExaServer {
 	static java.util.List map;
 	final int SLEEP_TIME = 70;
 	final int MAX_PLAYERS = 30;
-	static int counter = 0;
+	static int counter = 5;
 
 	public static void main(String[] args) {
 		new ExaServer();
@@ -87,6 +87,7 @@ public class ExaServer {
 				}
 				// System.out.println(updateCount);
 				// System.out.println("Updating");
+				System.out.println(map.size());
 				for (int i = 0; i < map.size(); i++) {
 					try {
 						((Entity) (map.get(i))).updateLocation();
@@ -108,7 +109,7 @@ public class ExaServer {
 	}
 
 	private class Player extends Thread {
-		private Entity entity;
+		private Spaceship entity;
 		private Socket socket;
 		private ObjectOutputStream output;
 		private ObjectInputStream input;
@@ -118,6 +119,7 @@ public class ExaServer {
 			// System.out.println("Player added");
 
 			this.ID = getID();
+			System.out.println("ID: " + ID);
 			this.socket = socket;
 			try {
 				output = new ObjectOutputStream(socket.getOutputStream());
@@ -139,13 +141,14 @@ public class ExaServer {
 		}
 
 		public void run() {
-			Entity temp;
+			Spaceship temp;
 			while (true) {
 				try {
 
-					temp = new Entity((Message) input.readObject());
+					temp = new Spaceship((SpaceshipMessage) input.readObject());
 					if (map.indexOf(entity) != -1)
 						entity.set(temp);
+						
 					else{
 						entity = temp.copy();
 						map.add(entity);

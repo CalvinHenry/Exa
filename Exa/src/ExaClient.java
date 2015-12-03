@@ -33,7 +33,7 @@ public class ExaClient extends javax.swing.JFrame {
 	public boolean upHeld, downHeld, rightHeld, leftHeld;
 	private static final long serialVersionUID = 1L;
 	java.util.List<Integer> pressed = new java.util.ArrayList<Integer>();
-	static Entity playerShip;
+	static Spaceship playerShip;
 	final double MULT = .05;
 	Container pane;
 	Screen paint;
@@ -43,9 +43,9 @@ public class ExaClient extends javax.swing.JFrame {
 	static ObjectOutputStream out;
 	static BufferedImage background;
 
-	public ExaClient(Entity e) {
+	public ExaClient(Spaceship e) {
 		this();
-		playerShip = new Entity();
+		playerShip = e;
 
 	}
 
@@ -97,6 +97,7 @@ public class ExaClient extends javax.swing.JFrame {
 			playerShip.setTopSpeed(2);
 			while (true) {
 				serverMap = Constants.messageToEntity((ArrayList<Message>) in.readObject());
+				System.out.println(serverMap);
 				initialClientUpdate();
 				inputCount++;
 				//System.out.println(inputCount + "Reading in");
@@ -173,9 +174,11 @@ public class ExaClient extends javax.swing.JFrame {
 				Entity theEntity = localMap.get(i);
 				if (playerShip.entityEquals(theEntity)) {
 					// playerShip = theEntity.copy();
+					System.out.println("Drawing playership");
 					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2 - playerShip.getImageHeight()/2, WINDOW_X / 2 - playerShip.getImageWidth()/2, null);
 
 				} else {
+					System.out.println("Drawing non playership");
 					g2D.drawImage(theEntity.getImage(),
 							(int) (theEntity.getLocation().getY() - playerShip.getLocation().getY() + (WINDOW_Y / 2) - theEntity.getImageHeight()/2),
 							(int) (theEntity.getLocation().getX() - playerShip.getLocation().getX() + (WINDOW_X / 2) - theEntity.getImageHeight()/2),
@@ -239,7 +242,7 @@ public class ExaClient extends javax.swing.JFrame {
 				try {
 					Thread.sleep(Constants.Socket.CLIENT_REFRESH);
 					if (playerShip != null) {
-						out.writeObject(new Message(playerShip));
+						out.writeObject(new SpaceshipMessage(playerShip));
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
