@@ -1,3 +1,4 @@
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -77,6 +78,7 @@ public class ExaServer {
 
 	private class Updater extends Thread {
 		public void run() {
+			ArrayList<Point2D.Double> locations = new ArrayList<Point2D.Double>();
 			while (true) {
 				updateCount++;
 				try {
@@ -87,10 +89,15 @@ public class ExaServer {
 				}
 				// System.out.println(updateCount);
 				// System.out.println("Updating");
-				System.out.println(map.size());
 				for (int i = 0; i < map.size(); i++) {
 					try {
 						((Entity) (map.get(i))).updateLocation();
+						locations.add(((Entity)(map.get(i))).getLocation());
+						if(hasDuplicate(locations)){
+							for(int x = 0; x < locations.size(); x ++){
+								
+							}
+						}
 						// System.out.println(((Entity)
 						// (map.get(i))).getResultant());
 						// System.out.println(((Entity)
