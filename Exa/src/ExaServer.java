@@ -11,12 +11,13 @@ public class ExaServer {
 
 	static int updateCount = 0;
 	static ArrayList<Player> players;
-	static java.util.List map;
+	static java.util.List<Entity> map;
 	final int SLEEP_TIME = 70;
 	final int MAX_PLAYERS = 30;
 	static int counter = 5;
 
 	public static void main(String[] args) {
+		Constants.initializeImages();
 		new ExaServer();
 	}
 
@@ -65,6 +66,7 @@ public class ExaServer {
 		public void run() {
 			while (true) {
 				try {
+					System.out.println("player added");
 					new Player(socket.accept()).start();
 				} catch (IOException e) {
 
@@ -85,17 +87,20 @@ public class ExaServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				// System.out.println(updateCount);
-				// System.out.println("Updating");
-				System.out.println(map.size());
+				
 				for (int i = 0; i < map.size(); i++) {
 					try {
 						((Entity) (map.get(i))).updateLocation();
+						if(map.get(i).remove()){
+							System.out.println("here");
+							map.remove(i);
+						}
 						// System.out.println(((Entity)
 						// (map.get(i))).getResultant());
 						// System.out.println(((Entity)
 						// (map.get(i))).getLocation());
 					} catch (Exception e) {
+						e.printStackTrace();
 						// System.out.println("There as been a small blip in
 						// program productivity. Please hold, and your space
 						// journey should resume shortly. In fact, it probably
@@ -119,7 +124,7 @@ public class ExaServer {
 			// System.out.println("Player added");
 
 			this.ID = getID();
-			System.out.println("ID: " + ID);
+			
 			this.socket = socket;
 			try {
 				output = new ObjectOutputStream(socket.getOutputStream());
@@ -146,10 +151,22 @@ public class ExaServer {
 				try {
 
 					temp = new Spaceship((SpaceshipMessage) input.readObject());
-					if (map.indexOf(entity) != -1)
+					if (map.indexOf(entity) != -1){
 						entity.set(temp);
+						//System.out.println(entity != null && entity.fire());
+						System.out.println(entity.currentCycles);
+						System.out.println(entity.fireButtonHeld);
+						System.out.println("Max: " + entity.fireRate);
+						if(entity != null && entity.fire()){
+							Bullet b = entity.getNewBullet();
+							b.setID(getID());
+							System.out.println("firing");
+							map.add(b);
+							entity.resetFireCount();
+						}
 						
-					else{
+					}else{
+						System.out.println("adding");
 						entity = temp.copy();
 						map.add(entity);
 						}

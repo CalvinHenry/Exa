@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -66,7 +67,7 @@ public class ExaClient extends javax.swing.JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// main.setResizable(false);
 		setExtendedState(Frame.MAXIMIZED_BOTH);
-
+		setBackground(Color.black);
 		pane = getContentPane();
 		paint = new Screen();
 
@@ -103,7 +104,7 @@ public class ExaClient extends javax.swing.JFrame {
 				//System.out.println(inputCount + "Reading in");
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 
 	}
@@ -138,9 +139,13 @@ public class ExaClient extends javax.swing.JFrame {
 		for (int i = 0; i < serverMap.size(); i++) {
 			
 			for (int j = 0; j < localMap.size(); j++) {
+				
 				if (serverMap.get(i).entityEquals(localMap.get(j))) {
 					localMap.get(j).setDifference(new Point2D.Double(localMap.get(j).getLocation().x - serverMap.get(i).getLocation().x, localMap.get(j).getLocation().y - serverMap.get(i).getLocation().y));
 					localMap.get(j).setAngleDifference(localMap.get(j).getEntityAngle() - serverMap.get(i).getEntityAngle());
+				}
+				if(localMap.get(j).remove){
+					localMap.remove(j);
 				}
 			}
 			
@@ -174,7 +179,7 @@ public class ExaClient extends javax.swing.JFrame {
 				Entity theEntity = localMap.get(i);
 				if (playerShip.entityEquals(theEntity)) {
 					// playerShip = theEntity.copy();
-					System.out.println("Drawing playership");
+					
 					g2D.drawImage(playerShip.getImage(), WINDOW_Y / 2 - playerShip.getImageHeight()/2, WINDOW_X / 2 - playerShip.getImageWidth()/2, null);
 
 				} else {
@@ -201,7 +206,7 @@ public class ExaClient extends javax.swing.JFrame {
 		}
 
 		public void keyPressed(KeyEvent e) {
-			int keyCode = e.getKeyCode();
+		  	int keyCode = e.getKeyCode();
 			if (keyCode == KeyEvent.VK_UP)
 				upHeld = true;
 			if (keyCode == KeyEvent.VK_DOWN)
@@ -211,6 +216,8 @@ public class ExaClient extends javax.swing.JFrame {
 				leftHeld = true;
 			if (keyCode == KeyEvent.VK_RIGHT)
 				rightHeld = true;
+			if(keyCode == KeyEvent.VK_SPACE)
+				playerShip.setFireButton(true);
 		}
 
 		public void keyReleased(KeyEvent e) {
@@ -223,6 +230,8 @@ public class ExaClient extends javax.swing.JFrame {
 				leftHeld = false;
 			if (keyCode == KeyEvent.VK_RIGHT)
 				rightHeld = false;
+			if(keyCode == KeyEvent.VK_SPACE)
+				playerShip.setFireButton(false);
 
 		}
 

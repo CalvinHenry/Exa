@@ -20,7 +20,7 @@ public class Message implements Serializable{
 		shipAngle = e.getEntityAngle();
 		imageType = e.getImageType();
 		ID = e.ID;
-		System.out.println("ID: " + ID);
+		
 	}
 	
 	public static Message getNewMessage(Entity e){

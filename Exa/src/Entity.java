@@ -10,19 +10,60 @@ import javax.imageio.ImageIO;
 
 public class Entity{
 	
-	private Point2D.Double location = new Point2D.Double(500, 500); //(x, y)
+	protected Point2D.Double location = new Point2D.Double(500, 500); //(x, y)
 	public double entityAngle = 0; //angle the ship faces
 	private double maxVelocity; //top speed
 	private AffineTransform transform;
 	private String imageType = "Qufeb";
-	private Point2D.Double resultant = new Point2D.Double(0,0);
+	protected Point2D.Double resultant = new Point2D.Double(0,0);
 	private Point2D.Double difference = new Point2D.Double(0,0); // The distance separating the client and server entity, only stored in the client, not used in server
 	private double shipAngleDifference = 0; //Same as above
 	public int ID;
 	public boolean inSync = false;
 	public BufferedImage image = null;
+	public boolean remove;
 	
-	
+	public Entity(Message m){
+		this();
+		location = new Point2D.Double(m.location.getX(), m.location.getY());
+		resultant = new Point2D.Double(m.resultant.getX(), m.resultant.getY());
+		entityAngle = m.shipAngle;
+		ID = m.ID;
+		
+		loadImage();
+	}
+	public static Entity getNewEntity(Message m){
+		if(m.object.equals("Entity")){
+			return new Entity(m);
+		}else if(m.object.equals("Spaceship")){
+			return new Spaceship((SpaceshipMessage)m);
+		}else if(m.object.equals("Bullet")){
+			return new Bullet((BulletMessage)m);
+		}
+		return null;
+	}
+	public Entity(Entity e){
+		this();
+		set(e);
+	}
+	public Entity(){
+		remove = false;
+		location = new Point2D.Double(0,0);
+		loadImage();
+	}
+	public Entity(Point2D.Double location, Point2D.Double speed, double angle){
+		this();
+		this.location = new Point2D.Double(location.x, location.y);
+		resultant = new Point2D.Double(speed.x, speed.y);
+		entityAngle = angle;
+		
+	}
+	public void set(Entity e){
+		location.setLocation(e.getLocation());
+		resultant.setLocation(e.getResultant());
+		entityAngle = e.getEntityAngle();
+		ID = e.ID;
+	}
 	public void loadImage(){
 		/*if(! (image.equals(null))){
 			System.out.println("Problem");
@@ -55,39 +96,10 @@ public class Entity{
 		maxVelocity = speed;
 	}
 	
-	public Entity(Message m){
-		this();
-		location = new Point2D.Double(m.location.getX(), m.location.getY());
-		resultant = new Point2D.Double(m.resultant.getX(), m.resultant.getY());
-		entityAngle = m.shipAngle;
-		ID = m.ID;
-		//System.out.println("ID: " + ID);
-		loadImage();
-	}
-	public static Entity getNewEntity(Message m){
-		if(m.object.equals("Entity")){
-			return new Entity(m);
-		}else if(m.object.equals("Spaceship")){
-			return new Spaceship((SpaceshipMessage)m);
-		}else if(m.object.equals("Bullet")){
-			return new Bullet((BulletMessage)m);
-		}
-		return null;
-	}
-	public Entity(Entity e){
-		this();
-		set(e);
-	}
-	public void set(Entity e){
-		location.setLocation(e.getLocation());
-		resultant.setLocation(e.getResultant());
-		entityAngle = e.getEntityAngle();
-		ID = e.ID;
-	}
 	
-	public Entity(){
-		loadImage();
-	}
+	
+	
+	
 	
 	public String getImageType(){
 		return imageType;
@@ -111,7 +123,7 @@ public class Entity{
 		
 	}
 	
-	void updateLocation(){
+	public void updateLocation(){
 		location.x += resultant.x;
 		location.y += resultant.y;
 		
@@ -166,7 +178,7 @@ public class Entity{
 	public double getEntityAngle(){
 		return entityAngle;
 	}
-	private void updateTransform(){
+	protected void updateTransform(){
 		
 		
 		loadImage();
@@ -216,6 +228,8 @@ public class Entity{
 		s += "ID: " + ID;
 		return s;
 	}
-	
+	public boolean remove(){
+		return remove;
+	}
 	
 }

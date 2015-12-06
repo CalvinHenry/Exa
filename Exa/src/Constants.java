@@ -23,12 +23,16 @@ public class Constants {
 		
 		try{
 		images[0] = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
-		System.out.println("got here");
+		
 		images[1] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
 		images[2] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/bigBoii.png")));
 		images[3] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Cepily.png")));
 		images[4] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Zax.png")));
 		images[5] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Skimo.png")));
+		images[6] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/laser_blue.png")));
+		images[7] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/laser_green.png")));
+		images[8] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/laser_red.png")));
+		System.out.println("Through image loading");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
