@@ -1,3 +1,4 @@
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +15,7 @@ public class ExaServer {
 	static java.util.List<Entity> map;
 	final int SLEEP_TIME = 70;
 	final int MAX_PLAYERS = 30;
-	static int counter = 5;
+	static int counter = 0;
 
 	public static void main(String[] args) {
 		Constants.initializeImages();
@@ -79,6 +80,7 @@ public class ExaServer {
 
 	private class Updater extends Thread {
 		public void run() {
+		ArrayList<Point2D.Double> locations = new ArrayList<Point2D.Double>();
 			while (true) {
 				updateCount++;
 				try {
@@ -91,6 +93,12 @@ public class ExaServer {
 				for (int i = 0; i < map.size(); i++) {
 					try {
 						((Entity) (map.get(i))).updateLocation();
+						locations.add(((Entity)(map.get(i))).getLocation());
+						if(hasDuplicate(locations)){
+							for(int x = 0; x < locations.size(); x ++){
+								
+							}
+						}
 						if(map.get(i).remove()){
 							System.out.println("here");
 							map.remove(i);
@@ -110,6 +118,13 @@ public class ExaServer {
 				}
 			}
 		}
+		
+		public boolean hasDuplicate(ArrayList<Point2D.Double> c){
+	        java.util.Set inputSet = new java.util.HashSet(c);
+	        if(inputSet.size()< c.size())
+	        return true;
+	        return false;
+	    }
 
 	}
 
@@ -124,7 +139,6 @@ public class ExaServer {
 			// System.out.println("Player added");
 
 			this.ID = getID();
-			
 			this.socket = socket;
 			try {
 				output = new ObjectOutputStream(socket.getOutputStream());
