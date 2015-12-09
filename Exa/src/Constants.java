@@ -14,16 +14,21 @@ public class Constants {
 	public static BufferedImage[] images = new BufferedImage[20];
 	
 	/*
-	 * 0 - Qufeb
-	 * 1 - 
-	 * 2 - 
+	 * 0 - Background
+	 * 1 - Qufeb
+	 * 2 - Big Boii
+	 * 3 - Cepily
+	 * 4 - Zax
+	 * 5 - Skimo
+	 * 6 - Blue Laser
+	 * 7 - Green Laser
+	 * 8 - Red Laser
 	 */
 	
 	public static void initializeImages(){
 		
 		try{
 		images[0] = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
-		
 		images[1] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Qufeb.png")));
 		images[2] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/bigBoii.png")));
 		images[3] = ImageIO.read(new File((System.getProperty("user.home") + "/Desktop/Exa/Cepily.png")));

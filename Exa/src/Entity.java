@@ -95,12 +95,12 @@ public class Entity{
 	public void setTopSpeed(int speed){
 		maxVelocity = speed;
 	}
-	
-	
-	
-	
-	
-	
+	public Point2D.Double getCenter(){
+		return new Point2D.Double(getLocation().getX()- image.getWidth(), getLocation().getY() - image.getHeight());
+	}
+	public double getRadius(){
+		return Math.pow(Math.pow((getLocation().getX()- image.getWidth()/2), 2) + Math.pow((getLocation().getY() - image.getHeight()/2), 2), 0.5);
+	}
 	public String getImageType(){
 		return imageType;
 	}
