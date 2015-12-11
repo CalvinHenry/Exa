@@ -19,6 +19,7 @@ public class ExaServer {
 
 	public static void main(String[] args) {
 		Constants.initializeImages();
+		(new ServerGUI()).setVisible(true);
 		new ExaServer();
 	}
 
