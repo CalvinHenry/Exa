@@ -78,15 +78,12 @@ public class ExaClient extends javax.swing.JFrame {
 	}
 
 	public static void main (String [] args) {
+		Constants.initializeImages();
+		ShipChooser sc = new ShipChooser();
 		System.out.println("Howdy");
 		UpgradeGUI ug = new UpgradeGUI();
 		System.out.println("Hi");
-		while(! ug.isFinished()){//wait until upgradeGUI is finished
-			if(ug.isFinished()) break;
-			else System.out.println("Still not done");
-		}
 		try {
-			Constants.initializeImages();
 			background = ImageIO.read(new File(System.getProperty("user.home") + "/Desktop/Exa/background.png"));
 			(client = new ExaClient(new Spaceship(ug.getNumbers()[0], ug.getNumbers()[1], ug.getNumbers()[2], ug.getNumbers()[3]))).setVisible(true);
 			socket = new Socket(getServerAddress(), PORT);
@@ -96,6 +93,9 @@ public class ExaClient extends javax.swing.JFrame {
 			ID = in.readInt();
 			playerShip.setID(ID);
 			playerShip.setTopSpeed(2);
+			//USE THESE VALUES AT SOME POINT
+			System.out.println(sc.getLaserColor());
+			System.out.println(sc.getShipType());
 			while (true) {
 				serverMap = Constants.messageToEntity((ArrayList<Message>) in.readObject());
 				System.out.println(serverMap);
