@@ -7,12 +7,20 @@ public class Bullet extends Entity{
 	
 	public final double DAMAGE_MULTIPLIER = .05;
 	public final double DISTANCE_MULTIPLIER = .2;
+	public final static double BULLET_SPEED = 10;
 	
-	public Bullet(int attackPotential, Point2D.Double location, Point2D.Double speed, double angle, String color){
-		super(location,new Point2D.Double(speed.x * 3, speed.y * 3),angle);
+	public Bullet(int attackPotential, Point2D.Double location, double angle, String color){
+		super(location,new Point2D.Double(BULLET_SPEED * -Math.cos(angle * Math.PI / 180), BULLET_SPEED * Math.sin(angle * Math.PI / 180)),angle);
 		this.color = color;
 		damage = (int) (attackPotential * DAMAGE_MULTIPLIER);
 		maxCycles = 75 + (int)(attackPotential * DISTANCE_MULTIPLIER);
+	}
+	public void takeDamage(int damage){
+		System.out.println("Taking Damage");
+		remove = true;
+	}
+	public int getDamage(){
+		return damage;
 	}
 	public void updateLocation(){
 		super.updateLocation();
@@ -43,5 +51,8 @@ public class Bullet extends Entity{
 	}
 	public void loadImage(){
 		image = Constants.images[6];
+	}
+	public boolean isBullet(){
+		return true;
 	}
 }

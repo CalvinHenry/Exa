@@ -1,5 +1,6 @@
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -22,6 +23,7 @@ public class Entity{
 	public boolean inSync = false;
 	public BufferedImage image = null;
 	public boolean remove;
+	public double recentlySetSpeed;
 	
 	public Entity(Message m){
 		this();
@@ -99,7 +101,7 @@ public class Entity{
 		return new Point2D.Double(getLocation().getX()- image.getWidth(), getLocation().getY() - image.getHeight());
 	}
 	public double getRadius(){
-		return Math.pow(Math.pow((getLocation().getX()- image.getWidth()/2), 2) + Math.pow((getLocation().getY() - image.getHeight()/2), 2), 0.5);
+		return Entity.getResultant(new Point2D.Double(image.getWidth()/2, image.getHeight()/2));
 	}
 	public String getImageType(){
 		return imageType;
@@ -131,7 +133,7 @@ public class Entity{
 		location.y -= difference.y / Constants.Socket.CYCLES_TO_SERVER_UPDATE;
 		
 		entityAngle -= shipAngleDifference /Constants.Socket.CYCLES_TO_SERVER_UPDATE;
-		
+		recentlySetSpeed = 0;
 		updateTransform();
 	}
 	
@@ -209,6 +211,75 @@ public class Entity{
 		}
 		return num;
 	}
+	public boolean collidesWith(Entity e){
+		System.out.println("A" + this + "Raidus: " + this.getRadius());
+		//System.out.println(getLocationOnMap());
+		//System.out.println(e.getLocationOnMap());
+		System.out.println("B" + e + "Raidus" + e.getRadius());
+		double radiusTotal = e.getRadius() + getRadius();
+		System.out.println("Radius Sum: " + radiusTotal);
+		double distance = location.distance(e.location);
+		
+		System.out.println("Distance: " + distance);
+		
+		boolean retr=  distance <= radiusTotal;	
+		System.out.println(retr);
+		return retr;
+	}
+	public Point2D.Double getLocationOnMap(){
+		return new Point2D.Double(location.x - image.getWidth(), location.y - image.getHeight());
+	}
+	public void collide(Entity e){
+		if(e.isShip()){
+			collideShips(e);
+		}else if(e.isBullet()){
+			System.out.println("here");
+			takeDamage(e.getDamage());
+			e.takeDamage(getDamage());
+		}
+		
+	}
+	public void takeDamage(int damage){
+		//This class really should be abstract but what the heck. 
+	}
+	public int getDamage(){
+		return 0;//This class REALLY should be abstract. 
+	}
+	public void collideShips(Entity s){
+		boolean localIsFaster = getSpeed() > s.getSpeed() ? true : false;
+		double angle = localIsFaster ? entityAngle : s.entityAngle;
+		Point2D.Double velocity = localIsFaster ? resultant : s.resultant;
+		if(localIsFaster){
+			s.setNewSpeed(velocity, angle);
+		}else{
+			setNewSpeed(velocity, angle);
+		}
+	}
+	
+	public double getSpeed(){
+		return Entity.getResultant(resultant);
+	}
+	public static double getResultant(Point2D.Double vector){
+		return Math.pow(Math.pow(vector.x, 2) + Math.pow((vector.y), 2), 0.5);
+	}
+	public double getDistance(Entity e){
+		double x = location.x - e.location.x;
+		double y = location.y - e.location.y;
+		return getResultant(new Point2D.Double(x,y));
+	}
+	public void setNewSpeed(Point2D.Double speed, double theta){
+		recentlySetSpeed = getResultant(speed);//Done so we know which collision to keep data of, if that speed is higher than the new one, than do nothing
+		
+		
+		/*this is the method where you need to do the ship thing
+		 * WARNING 
+		 * If you just set the angle to the one given, and it's more than one full rotation off, it will make the ship go 
+		 * WHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+		 * Constantly just spinning which could be cool admitedly... Actually never mind ignore that warning, that should happen in collisions. Heck maybve 
+		 * program it so it always forces shipw to go WHEEE
+		 * 
+		 */
+	}
 	public Entity copy(){
 		Entity temp = new Entity();
 		temp.entityAngle = entityAngle;
@@ -224,12 +295,18 @@ public class Entity{
 	public String toString(){
 		String s = location.toString();
 		s += " Angle:  " + entityAngle;
-		s += "Playership: " + (this.entityEquals(ExaClient.playerShip));
+		//s += "Playership: " + (this.entityEquals(ExaClient.playerShip));
 		s += "ID: " + ID;
 		return s;
 	}
 	public boolean remove(){
 		return remove;
+	}
+	public boolean isShip(){
+		return false;
+	}
+	public boolean isBullet(){
+		return false;
 	}
 	
 }

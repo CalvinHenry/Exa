@@ -202,9 +202,7 @@ public class ExaClient extends javax.swing.JFrame {
 				playerShip.rotate(-1);
 			if (rightHeld)
 				playerShip.rotate(1);
-
 		}
-
 		public void keyPressed(KeyEvent e) {
 		  	int keyCode = e.getKeyCode();
 			if (keyCode == KeyEvent.VK_UP)

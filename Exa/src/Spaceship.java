@@ -83,6 +83,12 @@ public class Spaceship extends Entity {
 	
 	public void takeDamage(int damage){
 		health -= damage;
+		if(health < 0){
+			remove = true;
+		}
+	}
+	public int getDamage(){
+		return (int)(healthPotential * .2);
 	}
 	public String getType(){
 		return "Spaceship";
@@ -94,7 +100,10 @@ public class Spaceship extends Entity {
 		return weaponPotential;
 	}
 	public Bullet getNewBullet(){
-		return new Bullet(weaponPotential, new Point2D.Double(location.x, location.y), new Point2D.Double(resultant.x, resultant.y), entityAngle, "blue");//At some point we may want to adjust this so that the laser appears at the front of the ship not the middle
+		return new Bullet(weaponPotential, new Point2D.Double(location.x, location.y), entityAngle, "blue");//At some point we may want to adjust this so that the laser appears at the front of the ship not the middle
+	}
+	public boolean isShip(){
+		return true;
 	}
 	
 

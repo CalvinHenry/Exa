@@ -91,18 +91,20 @@ public class ExaServer {
 				}
 				
 				for (int i = 0; i < map.size(); i++) {
+					
 					try {
 						((Entity) (map.get(i))).updateLocation();
-						locations.add(((Entity)(map.get(i))).getLocation());
+						/*locations.add(((Entity)(map.get(i))).getLocation());
 						if(hasDuplicate(locations)){
 							for(int x = 0; x < locations.size(); x ++){
 								
 							}
-						}
+						}*/
 						if(map.get(i).remove()){
-							System.out.println("here");
+							System.out.println("Removing entity");
 							map.remove(i);
 						}
+						
 						// System.out.println(((Entity)
 						// (map.get(i))).getResultant());
 						// System.out.println(((Entity)
@@ -114,6 +116,19 @@ public class ExaServer {
 						// journey should resume shortly. In fact, it probably
 						// resumed before you had time to process that these
 						// words appeard on the screen.");
+					}
+				}
+				checkCollisions();
+			}
+		}
+		public void checkCollisions(){
+			
+			for(int i = 0; i < map.size(); i ++){
+				for(int j = 0; j < map.size(); j ++){
+					
+					if(i != j && map.get(i).collidesWith(map.get(j))){
+						map.get(i).collide(map.get(j));
+						System.out.println("Collided");
 					}
 				}
 			}
@@ -168,13 +183,10 @@ public class ExaServer {
 					if (map.indexOf(entity) != -1){
 						entity.set(temp);
 						//System.out.println(entity != null && entity.fire());
-						System.out.println(entity.currentCycles);
-						System.out.println(entity.fireButtonHeld);
-						System.out.println("Max: " + entity.fireRate);
+						
 						if(entity != null && entity.fire()){
 							Bullet b = entity.getNewBullet();
 							b.setID(getID());
-							System.out.println("firing");
 							map.add(b);
 							entity.resetFireCount();
 						}
