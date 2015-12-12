@@ -98,17 +98,15 @@ public class ServerGUI extends javax.swing.JDialog {
     	    while (ee.hasMoreElements())
     	    {
     	        java.net.InetAddress i = (java.net.InetAddress) ee.nextElement();
-    	        addresses.add(i.getHostAddress());
+    	        if(! i.isLoopbackAddress() && ! i.getHostAddress().contains(":")&&! 
+    	        		  i.getHostAddress().equals(i.getHostName()) &&!  i.isMulticastAddress() ){
+    	        		//&&! i.isLinkLocalAddress() &&! i.isSiteLocalAddress()){
+    	        	addresses.add(i.getHostAddress());
+    	        	System.out.println(i.getHostName());
+    	        }
     	    }
     	}
     	System.out.println(addresses);
-    	for(int i = 0; i < addresses.size(); i++){
-    		if(addresses.get(i).contains(":") || addresses.get(i).startsWith("127.") || addresses.get(i).startsWith("192.168") || addresses.get(i).startsWith("172.")
-    				|| addresses.get(i).startsWith("169.254") || addresses.get(i).startsWith("224.") || addresses.get(i).startsWith("255.255.255")){
-    			addresses.remove(i);
-    			i--;
-    		}
-    	}
     	return addresses.get(0);
     }
 
