@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-
 import javax.imageio.ImageIO;
 
 public class Entity{
@@ -80,6 +79,9 @@ public class Entity{
 	}
 	public void setID(int i){
 		ID = i;
+	}
+	public void setAngle(double angle){
+		this.entityAngle = angle;
 	}
 	public boolean entityEquals(Entity e){
 		return ID == e.ID;
@@ -247,12 +249,11 @@ public class Entity{
 	}
 	public void collideShips(Entity s){
 		boolean localIsFaster = getSpeed() > s.getSpeed() ? true : false;
-		double angle = localIsFaster ? entityAngle : s.entityAngle;
-		Point2D.Double velocity = localIsFaster ? resultant : s.resultant;
+		double fasterAngle = localIsFaster ? entityAngle : s.entityAngle;
 		if(localIsFaster){
-			s.setNewSpeed(velocity, angle);
+			s.setAngle(s.getNewAngle(s.entityAngle, fasterAngle));
 		}else{
-			setNewSpeed(velocity, angle);
+			setAngle(getNewAngle(entityAngle, fasterAngle));
 		}
 	}
 	
@@ -267,10 +268,26 @@ public class Entity{
 		double y = location.y - e.location.y;
 		return getResultant(new Point2D.Double(x,y));
 	}
-	public void setNewSpeed(Point2D.Double speed, double theta){
-		recentlySetSpeed = getResultant(speed);//Done so we know which collision to keep data of, if that speed is higher than the new one, than do nothing
-		
-		
+	public double getNewAngle(double slowerTheta, double fasterTheta){
+		//recentlySetSpeed = getResultant(speed);//Done so we know which collision to keep data of, if that speed is higher than the new one, than do nothing
+		slowerTheta = getEffectiveAngle(slowerTheta);
+		double fasterTheta2 = getEffectiveAngle(fasterTheta);
+		double difference = getEffectiveAngle(Math.abs(fasterTheta2 - slowerTheta)) > 180 ?
+				getEffectiveAngle(Math.abs(fasterTheta2 - slowerTheta)) - 180 : getEffectiveAngle(Math.abs(fasterTheta2 - slowerTheta));
+		if(difference == 90){ //right angle collision
+			return slowerTheta + 180;
+		}else if(Math.cos(fasterTheta) > Math.sin(fasterTheta)){ //horizontal collision
+		if(isNegative(Math.cos(fasterTheta2)) == isNegative(Math.cos(slowerTheta))){ //if the ships are traveling in the same direction
+			return fasterTheta - difference;
+		}else return fasterTheta + 180 - difference;
+		}else if(Math.sin(fasterTheta) > Math.cos(fasterTheta)){ //vertical collision
+			if(isNegative(Math.sin(fasterTheta2)) == isNegative(Math.sin(slowerTheta))){
+				return fasterTheta - difference;
+			}else return fasterTheta + 180 - difference;
+		}else{
+			System.out.println("Error getting new angle");
+			return 0.00;
+		}
 		/*this is the method where you need to do the ship thing
 		 * WARNING 
 		 * If you just set the angle to the one given, and it's more than one full rotation off, it will make the ship go 
@@ -279,6 +296,25 @@ public class Entity{
 		 * program it so it always forces shipw to go WHEEE
 		 * 
 		 */
+	}
+	
+	private boolean isNegative(double blah){
+		if(blah < 0) return true;
+		else return false;
+	}
+	
+	public double getEffectiveAngle(double angle) { // [0, 360) positive
+					// x-axis is 0
+		//Formatting is just to mess with Calvin and not a comment on my ability to indent
+			if (angle >= 360)
+			while (angle >= 360)
+			angle -= 360;
+			else if (angle <= -360) {
+			while (angle <= -360)
+			angle += 360;
+			angle += 360;
+			}
+		return angle;
 	}
 	public Entity copy(){
 		Entity temp = new Entity();

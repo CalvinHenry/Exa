@@ -67,7 +67,7 @@ public class ServerGUI extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
         );
-        this.setSize(345, 345);
+        this.setSize(400, 300);
     }// </editor-fold>                        
 
 
